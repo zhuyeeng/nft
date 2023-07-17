@@ -9,4 +9,4 @@ const HelpCenter = () => {
   )
 }
 
-export default HelpCenter
+export default HelpCenter;
