@@ -39,7 +39,7 @@ const NavBar = () => {
       setNotification(false);
       setProfile(false);
     }
-  }
+  };
 
   const openNotification = () =>{
     if(!notification){
@@ -50,7 +50,7 @@ const NavBar = () => {
     }else{
       setNotification(false);
     }
-  }
+  };
 
   const openProfile = () =>{
     if(!profile){
@@ -61,7 +61,7 @@ const NavBar = () => {
     }else{
       setProfile(false);
     }
-  }
+  };
 
   const openSideBar= () => {
     if(!openSideMenu){
@@ -69,9 +69,9 @@ const NavBar = () => {
     }else{
       setOpenSideMenu(false);
     }
-  }
+  };
 
-  return 
+  return(
     <div className={Style.navbar}>
       <div className={Style.navbar_container}>
         <div className={Style.navbar_container_left}>
@@ -83,15 +83,15 @@ const NavBar = () => {
               height= {100}
             />
           </div>
-          <div className={Style.navbar_container_right}>
+          <div className={Style.navbar_container_left_input}>
             <div className={Style.navbar_container_left_box_input_box}>
               <input type='text' placeholder='Search NFT' />
               <BsSearch onClick={() => {}} className={Style.search_icon} />
             </div>
           </div>
         </div>
-
         {/*End of Left Section */}
+
         <div className={Style.navbar_container_right}>
           <div className={Style.navbar_container_right_discover}>
             {/*Discover Menu*/}
@@ -102,6 +102,7 @@ const NavBar = () => {
               </div>
             )}
           </div>
+          
           {/*Help Center Menu*/}
           <div className={Style.navbar_container_right_help}>
             <p onClick={(e) => openMenu(e)}>Help Center</p>
@@ -113,40 +114,53 @@ const NavBar = () => {
           </div>
           {/* NOTIFICATION*/}
           <div className={Style.navbar_container_right_notify}>
-            <MdNotifications className={Style.notify} onClick={()=> openNotification()}/>
+            <MdNotifications 
+              className={Style.notify} 
+              onClick={()=> openNotification()}
+            />
             {notification && <Notification />}
           </div>
 
           {/* CREATE BUTTON SECTION*/}
           <div className={Style.navbar_container_right_button}>
-            <button btnText="Create" />
+            <Button btnText="Create" />
           </div>
 
           {/*USER PROFILE*/}
           <div className={Style.navbar_container_right_profile_box}>
             <div className={Style.navbar_container_right_profile}>
-              <Image src={images.user1} alt = "Profile" width={40} height={40} onClick={()=> openProfile()} />
-
+              <Image 
+                src={images.user1} 
+                alt = "Profile" 
+                width={40} 
+                height={40} 
+                onClick={()=> openProfile()}
+                className={Style.navbar_container_right_profile}
+              />
               {profile && <Profile />}
             </div>
           </div>
 
           {/* MENU BUTTON */}
           <div className={Style.navbar_container_right_menuBtn}>
-            <CgMenuRight className={Style.menuIcon}
-            onClick={()=> openSideBar()} />
+            <CgMenuRight 
+              className={Style.menuIcon}
+              onClick={()=> openSideBar()} 
+            />
           </div>
         </div>
       </div>
+
       {/* SIDEBAR COMPONENT */}
       {
-        openSideMenu &&(
+        openSideMenu && (
           <div className={Style.Sidebar}>
             <SideBar setOpenSideMenu={setOpenSideMenu}/>
           </div>
         )
       }
     </div>
+  );
 };
 
-export default NavBar
+export default NavBar;
