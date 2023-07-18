@@ -9,13 +9,13 @@ import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
 
 //CSS file
 import Style from "./NavBar.module.css";
-import { Discover, HelpCenter, Notification, Profile } from './index';
+import { Discover, HelpCenter, Notification, Profile, SideBar } from './index';
 import { Button } from "../ComponentsIndex";
 import images from '../../img';
 
 const NavBar = () => {
   //UseState
-  const [Discover, setDiscover] = useState(false);
+  const [discover, setDiscover] = useState(false);
   const [help, setHelp] = useState(false);
   const [notification, setNotification] = useState(false);
   const [profile, setProfile] = useState(false);
@@ -96,7 +96,7 @@ const NavBar = () => {
           <div className={Style.navbar_container_right_discover}>
             {/*Discover Menu*/}
             <p onClick={(e) => openMenu(e)}> Discover </p>
-            { Discover && (
+            { discover && (
               <div className={Style.navbar_container_right_discover_box}>
                 <Discover />
               </div>
