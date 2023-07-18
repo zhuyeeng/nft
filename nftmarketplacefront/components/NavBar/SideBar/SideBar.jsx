@@ -85,27 +85,27 @@ const SideBar = ({ setOpenSideMenu}) => {
     }
   };
 
-  const closeSideBar = () => {
-    setOpenSideMenu(false);
+  const close_SideBar = () => {
+    setOpenSideMenu(true);
   };
 
 
   return (
     <div className={Style.sideBar}>
       <GrClose 
-        className={Style.sidebar_closeBtn} 
-        onClick={() => closeSideBar()}
+        className={Style.sideBarcloseBtn} 
+        onClick={() => close_SideBar()}
       />
 
-      <div className={Style.sidebar_box}>
+      <div className={Style.sideBar_box}>
         <Image
           src={images.logo}
           alt="logo"
           width={150}
           height={150}
         />
-        <p>Something Something ......</p>
-        <div className={Style.sidebar_social}>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <div className={Style.sideBar_social}>
           <a href='#'>
             <TiSocialFacebook />
           </a>
@@ -126,14 +126,14 @@ const SideBar = ({ setOpenSideMenu}) => {
 
       <div className={Style.sideBar_menu}>
         <div>
-          <div className={Style.sidebar_menu_box} onClick={() => openDiscoverMenu()}>
+          <div className={Style.sideBar_menu_box} onClick={() => openDiscoverMenu()}>
             <p>Discover</p>
             <TiArrowSortedDown />
           </div>
 
           {
             openDiscover && (
-              <div className={Style.sidebar_discover}>
+              <div className={Style.sideBar_discover}>
                 {discover.map((el,i) => (
                   <p key={i + 1}>
                     <Link href={{pathname: '${el.link}' }}>{el.name}</Link>
@@ -144,14 +144,14 @@ const SideBar = ({ setOpenSideMenu}) => {
         </div>
 
         <div>
-          <div className={Style.sidebar_menu_box} onClick={() => openHelpMenu()}>
+          <div className={Style.sideBar_menu_box} onClick={() => openHelpMenu()}>
             <p>Help Center</p>
             <TiArrowSortedDown />
           </div>
 
           {
             openHelp && (
-              <div className={Style.sidebar_discover}>
+              <div className={Style.sideBar_discover}>
                 {helpCenter.map((el, i) => (
                   <p key = {i + 1}>
                     <Link href={{pathname: '${el.link}' }}>{el.name}</Link>
