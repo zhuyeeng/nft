@@ -32,6 +32,7 @@
     gap: 2rem;
     padding: 1rem 2rem;
     transition:  all .3s ease-in;
+    cursor: pointer;
 }
 
 .profile_menu_one_item:hover{
