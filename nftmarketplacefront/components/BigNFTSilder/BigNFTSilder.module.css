@@ -8,7 +8,7 @@
 }
 
 .bigNFTSlider_box_left{
-    grid-column: 1/7;
+    grid-column: 1/6;
     grid-row: 1/-1;
     background-color: var(--box-shadow-2);
     border-radius: 1rem;
@@ -25,7 +25,7 @@
 .bigNFTSlider_box_right{
     grid-column: 6/-1;
     grid-row: 1/-1;
-    padding: 1rem;
+    /* padding: 1rem; */
     background-color: var(--main-bg-color);
     border-radius: 2.5rem;
     box-shadow: var(--main-bg-color);
@@ -75,8 +75,12 @@
 .bigNFTSlider_box_left_bidding_box{
     border: 3px solid var(--shadow-dark-color);
     margin-block: 2rem;
-    padding: 0 4rem;
+    padding: 1rem 2rem;
     border-radius: .5rem;
+}
+
+.bigNFTSlider_box_left_bidding_box p{
+    margin: 1.5rem 0 0 0;
 }
 
 .bigNFTSlider_box_left_bidding_box_auction{
