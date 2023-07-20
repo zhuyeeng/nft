@@ -64,6 +64,7 @@
     width: 15rem;
     border-radius: 1rem;
     background-color: var(--main-bg-color);
+    margin-top: .8rem;
 }
 
 .navbar_container_right_notify{
