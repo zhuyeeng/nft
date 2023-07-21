@@ -82,14 +82,14 @@ const BigNFTSilder = () => {
     // Increase Number
     const inc = useCallback(() => {
         if(idNumber + 1 < sliderData.length){
-            setIdNumber(setIdNumber + 1);
+            setIdNumber(idNumber + 1);
         }
     }, [idNumber, sliderData.length]);
 
     // decrease number
     const dec = useCallback(() => {
         if(idNumber > 0){
-            setIdNumber(setIdNumber - 1);
+            setIdNumber(idNumber - 1);
         }
     }, [idNumber]);
 
@@ -105,13 +105,14 @@ const BigNFTSilder = () => {
                     <div className={Style.bigNFTSlider_box_left_creator}>
                         <div className={Style.bigNFTSlider_box_left_creator_profile}>
                             <Image
+                                className={Style.bigNFTSlider_box_left_creator_profile_img}
                                 src={sliderData[idNumber].image}
                                 alt='Profile Image'
                                 width={50}
                                 height={50}
                             />
                             
-                            <div className={Style.bigNFTSlider_box_left_creator_profile_image}>
+                            <div className={Style.bigNFTSlider_box_left_creator_profile_info}>
                                 <p>Creator</p>
                                 <h4>
                                     {sliderData[idNumber].name}{" "}
@@ -191,8 +192,10 @@ const BigNFTSilder = () => {
 
                 <div className={Style.bigNFTSlider_box_right}>
                     <div className={Style.bigNFTSlider_box_right_box}>
-                        <Image src={sliderData[idNumber].nftImage} alt="NFT IMAGE"/>
-
+                        <Image 
+                            src={sliderData[idNumber].nftImage} alt="NFT IMAGE" 
+                            className={Style.bigNFTSlider_box_right_box_img}
+                        />
                         <div className={Style.bigNFTSlider_box_right_box_like}>
                             <AiFillHeart />
                             <span>{sliderData[idNumber].like}</span>

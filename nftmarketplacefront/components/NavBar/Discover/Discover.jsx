@@ -39,7 +39,7 @@ const Discover = () => {
   return (
     <div>
       { discover.map((el, i) => (
-        <div key={i + 1} className={Style.discover}>
+        <div key={`discoverItem - ${i}`} className={Style.discover}>
           <Link href={{pathname: '${el.link}' }}>{el.name}</Link>
         </div>
       ))}

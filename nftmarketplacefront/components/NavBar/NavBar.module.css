@@ -50,7 +50,8 @@
     align-items: center;
 }
 
-.navbar_container_right_discover{
+.navbar_container_right_discover,
+.navbar_container_right_help{
     position: relative;
     cursor: pointer;
 }
