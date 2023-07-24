@@ -5,7 +5,7 @@ import { RiSendPlaneFill } from 'react-icons/ri';
 
 import Style from './Footer.module.css';
 import images from '../../img';
-import { Discover, HelpCenter } from '../NavBar/index';
+import { MarketPlace, HelpCenter } from '../NavBar/index';
 
 const Footer = () => {
     return(
@@ -39,8 +39,8 @@ const Footer = () => {
                 </div>
 
                 <div className={Style.footer_box_discover}>
-                    <h3>Discover</h3>
-                    <Discover />
+                    <h3>Market Place</h3>
+                    <MarketPlace />
                 </div>
 
                 <div className={Style.footer_box_help}>

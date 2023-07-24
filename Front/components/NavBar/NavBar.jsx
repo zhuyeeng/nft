@@ -9,13 +9,13 @@ import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
 
 //CSS file
 import Style from "./NavBar.module.css";
-import { Discover, HelpCenter, Notification, Profile, SideBar } from './index';
+import { HelpCenter, Notification, Profile, SideBar, MarketPlace } from './index';
 import { Button } from "../ComponentsIndex";
 import images from '../../img';
 
 const NavBar = () => {
   //UseState
-  const [discover, setDiscover] = useState(false);
+  const [marketplace, setOpenMarketPlace] = useState(false);
   const [help, setHelp] = useState(false);
   const [notification, setNotification] = useState(false);
   const [profile, setProfile] = useState(false);
@@ -23,18 +23,18 @@ const NavBar = () => {
 
   const openMenu = (e) => {
     const btnText = e.target.innerText;
-    if(btnText == "Discover"){
-      setDiscover(true);
+    if(btnText == "Market Place"){
+      setOpenMarketPlace(true);
       setHelp(false);
       setNotification(false);
       setProfile(false);
     }else if(btnText == "Help Center"){
-      setDiscover(false);
+      setOpenMarketPlace(false);
       setHelp(true);
       setNotification(false);
       setProfile(false);
     }else{
-      setDiscover(false);
+      setOpenMarketPlace(false);
       setHelp(false);
       setNotification(false);
       setProfile(false);
@@ -44,7 +44,7 @@ const NavBar = () => {
   const openNotification = () =>{
     if(!notification){
       setNotification(true);
-      setDiscover(false);
+      setOpenMarketPlace(false);
       setHelp(false);
       setProfile(false);
     }else{
@@ -56,7 +56,7 @@ const NavBar = () => {
     if(!profile){
       setProfile(true)
       setHelp(false)
-      setDiscover(false)
+      setOpenMarketPlace(false)
       setNotification(false)
     }else{
       setProfile(false);
@@ -95,10 +95,10 @@ const NavBar = () => {
         <div className={Style.navbar_container_right}>
           <div className={Style.navbar_container_right_discover}>
             {/*Discover Menu*/}
-            <p onClick={(e) => openMenu(e)}> Discover </p>
-            { discover && (
+            <p onClick={(e) => openMenu(e)}> Market Place </p>
+            { marketplace && (
               <div className={Style.navbar_container_right_discover_box}>
-                <Discover />
+                <MarketPlace />
               </div>
             )}
           </div>
