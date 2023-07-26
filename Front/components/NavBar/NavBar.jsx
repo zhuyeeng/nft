@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+// import { ethers } from 'ethers';
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ import { Button } from "../ComponentsIndex";
 import images from '../../img';
 
 const NavBar = () => {
+  
   //UseState
   const [marketplace, setOpenMarketPlace] = useState(false);
   const [help, setHelp] = useState(false);
@@ -123,6 +125,7 @@ const NavBar = () => {
 
           {/* CREATE BUTTON SECTION*/}
           <div className={Style.navbar_container_right_button}>
+            {/* <button onClick={connectWalletHandler} className={Style.connect_wallet_button}>{connButtonText}</button> */}
             <Button btnName="Create" handleClick={()=>{}}/>
           </div>
 

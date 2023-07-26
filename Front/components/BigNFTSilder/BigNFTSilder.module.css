@@ -1,15 +1,16 @@
 .bigNFTSlider_box{
-    margin: 0 auto;
+    margin:  0 auto;
     width: 80%;
-    padding-block: 8rem;
+    padding-block: 8rem; 
+
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     align-items: center;
 }
 
 .bigNFTSlider_box_left{
-    grid-column: 1/6;
-    /* grid-row: 1 / -1; */
+    grid-column: 1 / 7;
+    grid-row: 1 / -1;
     background-color: var(--main-bg-color);
     box-shadow: var(--box-shadow-2);
     border-radius: 1rem;
@@ -20,19 +21,20 @@
 
 .bigNFTSlider_box_left h2{
     font-size: 3rem;
-    line-height: 3rem;
+    line-height: 0;
 }
 
 .bigNFTSlider_box_right{
-    grid-column: 6/-1;
-    grid-row: 1/-1;
+    grid-column: 6 / -1;
+    grid-row:  1 / -1;
     padding: 1rem;
     background-color: var(--main-bg-color);
     border-radius: 2.5rem;
-    box-shadow: var(--main-bg-color);
+    box-shadow: var(--box-shadow-2);
+    /* box-shadow: var(--main-bg-color); */
 }
 
-/*Creator */
+/* //CREATOR SECTION */
 .bigNFTSlider_box_left_creator{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -50,8 +52,7 @@
 }
 
 .bigNFTSlider_box_left_creator_profile_info{
-    margin-bottom: -.7rem;
-    margin-top: 1rem;
+    line-height: 0;
 }
 
 .bigNFTSlider_box_left_creator_profile_info p{
@@ -76,13 +77,8 @@
 .bigNFTSlider_box_left_bidding_box{
     border: 3px solid var(--shadow-dark-color);
     margin-block: 2rem;
-    /* padding: 1rem 2rem; */
-    padding: 0 4rem;
+    padding: 0 2rem;
     border-radius: .5rem;
-}
-
-.bigNFTSlider_box_left_bidding_box p{
-    margin: 1.5rem 0 0 0;
 }
 
 .bigNFTSlider_box_left_bidding_box_auction{
@@ -96,6 +92,7 @@
     padding: 1rem 2rem;
     border-radius: .5rem;
     font-weight: 600;
+    line-height: 4;
 }
 
 .bigNFTSlider_box_left_bidding_box_icon{
@@ -108,27 +105,10 @@
     gap: 3rem;
     text-align: center;
     padding: 1rem 0rem 3rem 0;
-    border-bottom: 1px solid var(--shadow-dark-color);
+    border-bottom:  1px solid var(--shadow-dark-color);
+    line-height: 3;
 }
 
-.bigNFTSlider_box_left_bidding_box small{
-    background-color: var(--shadow-dark-color);
-    padding: 1rem 2rem;
-    border-radius: .5rem;
-    font-weight: 600;
-}
-
-.bigNFTSlider_box_left_bidding_box_icon{
-    font-size: 2rem;
-}
-
-.bigNFTSlider_box_left_bidding_box_timer{
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    text-align: center;
-    padding: 1rem 0rem 3rem 1rem;
-}
 
 .bigNFTSlider_box_left_bidding_box_timer_item p{
     font-size: 2rem;
@@ -152,21 +132,6 @@
     margin-top: 3rem;
 }
 
-.bigNFTSlider_box_left_bidding_box_timer_item p{
-    font-size: 2rem;
-    font-weight: 900;
-    line-height: 0;
-}
-
-.bigNFTSlider_box_left_button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4rem;
-    padding-block: 2rem 0rem;
-    font-size: 4rem;
-}
-
 .bigNFTSlider_box_left_sliderBtn_icon{
     cursor: pointer;
     transition:  all .3s ease-in;
@@ -178,7 +143,8 @@
     padding: 1rem;
 }
 
-/*Right Side*/
+/* //---RIGHT SECTION */
+
 .bigNFTSlider_box_right_box{
     position: relative;
 }
@@ -201,22 +167,31 @@
     border-radius: 5rem;
 }
 
-@media  screen and (max-width: 65em) {
+
+@media screen and (max-width: 65em) {
     .bigNFTSlider_box{
         width: 90%;
-        /* padding-top: 28rem; */
+        padding-top: 28rem;
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
     .bigNFTSlider_box_left{
-        height: 120vh;
+        height: 65vh;
         padding: 1.5rem;
     }
 
-    /* .bigNFTSlider_box_right{
-        margin-top: -40rem;
-    } */
+    .bigNFTSlider_box_left h2{
+        line-height: 1;
+    }
+
+    .bigNFTSlider_box_right{
+        margin-top: -70rem;
+    }
+
+    .bigNFTSlider_box_left_bidding_box{
+        padding: 1rem 1.5rem;
+    }
 
     .bigNFTSlider_box_left_creator{
         gap: 1rem;
@@ -240,7 +215,16 @@
         gap: 2rem;
     }
 
-    .bigNFTSlider_box_left_bidding_box_timer_item{
+    .bigNFTSlider_box_left_bidding_box_timer_item p{
         font-size: 1rem;
+    }
+
+    .bigNFTSlider_box_right_box_like{
+        right: .5rem;
+        top: .5rem;
+    }
+
+    .bigNFTSlider_box_left_bidding_box small{
+        line-height: 3.5;
     }
 }

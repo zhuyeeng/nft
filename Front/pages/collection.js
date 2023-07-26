@@ -1,4 +1,4 @@
-import React from 'react';;
+import React, { useState } from 'react';
 
 //CSS
 import Style from '../styles/collection.module.CSS';

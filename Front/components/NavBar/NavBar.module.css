@@ -118,6 +118,24 @@
     display: none;
 }
 
+.connect_wallet_button{
+    background-color:  var(--icons-color);
+    padding: 1rem 2rem;
+    border: 1px solid var(--icons-color);
+    border-radius: 2rem;
+    font-size: 1.1rem;
+    color: var(--shadow-light-color);
+    cursor: pointer;
+    transition: all .2s ease-in;
+    box-shadow: var(--box-shadow);
+}
+
+.connect_wallet_button:hover{
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--icons-color);
+    color: var(--icons-color);
+}
+
 @media screen and (min-device-width: 320px) and (max-device-width: 768px){
     .navbar_container{
         grid-template-columns: 1fr 1fr;
