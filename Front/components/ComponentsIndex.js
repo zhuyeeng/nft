@@ -6,5 +6,6 @@ import Service from './Service/Service';
 import BigNFTSilder from './BigNFTSilder/BigNFTSilder';
 import Title from './Title/Title';
 import Category from './Category/Category';
+import NFTCard from './NFTCard/NFTCard';
 
-export{ Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Title, Category };
+export{ Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Title, Category, NFTCard };
