@@ -1,6 +1,7 @@
 const { ethers } = require('ethers');
 const axios = require('axios');
 require('dotenv').config();
+const fs = require('fs');
 
 // Assuming you have an instance of ethers connected to your Ethereum network.
 const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963efe4');
@@ -18,10 +19,14 @@ const signer = new ethers.Wallet(accountPrivateKey, provider);
 // Create an instance of the contract using the contract ABI and contract address.
 const nftContract = new ethers.Contract(contractAddress, contractAbi, signer);
 
+const items_data = [];
+
 // Call the 'uri' public variable using the 'uri' method.
 async function getNFT() {
+
   let i = 0;
   const nftUri = [];
+
   while (true) {
     try {
       const x = await nftContract.tokenURI(i);
@@ -36,8 +41,10 @@ async function getNFT() {
 }
 
 async function getOwner() {
+
   let i = 0;
   const nftOwner = [];
+
   while (true) {
     try {
       const owner = await nftContract.ownerOf(i);
@@ -52,7 +59,9 @@ async function getOwner() {
 }
 
 async function getNFTDataFromIPFS() {
+
   const arrayData = [];
+
   try {
     const nftUris = await getNFT(); // Array of URIs returned by getNFT()
     const nftOwnerAddress = await getOwner();
@@ -67,27 +76,58 @@ async function getNFTDataFromIPFS() {
       // Parse the response data as JSON
       const nftData = response.data;
 
+      const ownerAddress = nftOwnerAddress[nftId - 1];
+
       const formattedData = {
         nftId: nftId,
         description: nftData.description,
         image: nftData.image,
         name: nftData.name,
+        ownerAddress: ownerAddress,
       }
 
       arrayData.push(formattedData);
       nftId++;
     }
 
-    // for(let i = 0; i < arrayData.length; i++){
-    //   console.log("NFT Data: ", arrayData[i]);
-    // }
-
-    console.log("NFT Data: ", arrayData[0]);
-    
   } catch (error) {
     console.error('Error fetching NFT data:', error.message);
   }
   return arrayData;
 }
 
-get
+async function pushData(){
+  try{
+    const Data = await getNFTDataFromIPFS();
+    
+    for (const nftData of Data) {
+      const getData = [{
+        id: nftData.nftId,
+        description: nftData.description,
+        image: nftData.image,
+        name: nftData.name,
+        ownerAddress: nftData.ownerAddress,
+      }];
+      items_data.push(getData);
+    }
+
+    const jsonData = JSON.stringify(items_data, null, 2);
+    fs.writeFile('xxx.json', jsonData, (err) => {
+      if (err) {
+        console.error('Error writing to the JSON file:', err.message);
+      } else {
+        console.log('Data has been saved to xxx.json');
+      }
+    });
+
+    return;
+  }catch(error){
+    console.log("Error Message: ",error.message);
+    throw new Error;
+  }
+  
+}
+
+
+pushData();
+// export{ items_data, pushData };
