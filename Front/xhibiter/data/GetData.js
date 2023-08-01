@@ -1,10 +1,119 @@
-const { ethers } = require('ethers');
+// const { ethers } = require('ethers');
+// const axios = require('axios');
+// require('dotenv').config();
+// // const fs = require('fs');
+
+// // Assuming you have an instance of ethers connected to your Ethereum network.
+// const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963efe4');
+
+// // Replace 'YourContractAbi' with your NFT contract's ABI (Application Binary Interface).
+// const contractAbi = require('./ABI.json');
+// const contractAddress = process.env.CONTRACT_ADDRESS;
+
+// // Replace 'YourAccountPrivateKey' with the private key of the account you are using to interact with the contract.
+// const accountPrivateKey = process.env.PRIVATE_KEY;
+// // console.log(accountPrivateKey);
+// // Create a signer with the account's private key.
+// const signer = new ethers.Wallet(accountPrivateKey, providear);
+
+// // Create an instance of the contract using the contract ABI and contract address.
+
+
+// async function getAllNFTData() {
+//   const nftData = [];
+
+//   const nftContract = new ethers.Contract(contractAddress, contractAbi, signer);
+//   const totalIndex = await nftContract.totalSupply();
+
+//   // Create an array of promises to fetch tokenURI and tokenOwner for each token
+//   const promises = [];
+//   for (let index = 0; index < totalIndex; index++) {
+//     promises.push(getNFTData(nftContract, index));
+//   }
+
+//   // Wait for all promises to resolve using Promise.all
+//   const results = await Promise.all(promises);
+
+//   // Store the results in the nftData array
+//   results.forEach((result) => {
+//     nftData.push({ owner: result.tokenOwner, nftUri: result.tokenURI });
+//   });
+
+//   // console.log(nftData);
+//   return nftData;
+// }
+
+// async function getNFTData(nftContract, index) {
+//   const tokenURI = await nftContract.tokenURI(index);
+//   const tokenOwner = await nftContract.ownerOf(index);
+
+//   return { tokenOwner, tokenURI };
+// }
+
+// async function getNFTDataFromIPFS() {
+
+//   let nftDatas = await  getAllNFTData();
+
+//   for (const data of nftDatas){
+//     const uriData = data.nftUri.replace('ipfs://', 'https://ipfs.io/ipfs/');
+//     // console.log(data);
+//     // console.log(uriData);
+
+//     try {
+//       const response = await axios.get(uriData);
+//       data.uriData = response.data;
+//     } catch (error) {
+//       console.error(`Error fetching data for ${data.nftUri}:`, error.message);
+//       // You can handle errors here if necessary
+//     }
+//   }
+//   return nftDatas;
+// }
+
+// function renameAndAddProperties(nftDataArray) {
+// 	return nftDataArray.map((item) => {
+// 		return {
+// 			id: item.uriData.id,
+// 			description: item.uriData.description,
+// 			image: item.uriData.image,
+// 			name: item.uriData.name,
+// 			ownerName: item.uriData.ownerAddress,
+// 			title: 'something',
+// 			price: 1.55,
+// 			like: 160,
+// 			creatorImage: item.uriData.image,
+// 			ownerImage: item.uriData.image,
+// 			creatorName: 'hello',
+// 			auction_timer: '636234213',
+// 			text: 'Lorum',
+// 			// Add any other properties you need
+// 		};
+// 	});
+// }
+
+// async function fetchAndProcessNFTData() {
+// 	try {
+// 		const nftDataWithUriData = await getNFTDataFromIPFS();
+// 		const modifiedNftDatas = renameAndAddProperties(nftDataWithUriData);
+// 		console.log(modifiedNftDatas);
+// 		return modifiedNftDatas;
+// 	} catch (error) {
+// 		console.error('Error fetching NFT data:', error.message);
+// 	}
+// }
+
+// // fetchAndProcessNFTData()
+// module.exports = {fetchAndProcessNFTData}
+// // console.log(process.env.CONTRACT_ADDRESS);
+
+
+const { Web3 } = require('web3');
 const axios = require('axios');
 require('dotenv').config();
 // const fs = require('fs');
 
 // Assuming you have an instance of ethers connected to your Ethereum network.
-const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963efe4');
+const web3 = new Web3('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963efe4');
 
 // Replace 'YourContractAbi' with your NFT contract's ABI (Application Binary Interface).
 const contractAbi = require('./ABI.json');
@@ -14,132 +123,92 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 const accountPrivateKey = process.env.PRIVATE_KEY;
 // console.log(accountPrivateKey);
 // Create a signer with the account's private key.
-const signer = new ethers.Wallet(accountPrivateKey, provider);
 
 // Create an instance of the contract using the contract ABI and contract address.
-const nftContract = new ethers.Contract(contractAddress, contractAbi, signer);
 
-const items_data = [];
 
-// Call the 'uri' public variable using the 'uri' method.
-async function getNFT() {
+async function getAllNFTData() {
+  const nftData = [];
 
-  let i = 0;
-  const nftUri = [];
+  const nftContract = new web3.eth.Contract(contractAbi,contractAddress);
+  const totalIndex = await nftContract.methods.totalSupply().call();
 
-  while (true) {
-    try {
-      const x = await nftContract.tokenURI(i);
-      nftUri.push(x);
-      i++;
-    } catch (error) {
-      // Break the loop when there are no more valid token IDs
-      break;
-    }
+  // Create an array of promises to fetch tokenURI and tokenOwner for each token
+  const promises = [];
+  for (let index = 0; index < totalIndex; index++) {
+    promises.push(getNFTData(nftContract, index));
   }
-  return nftUri;
+
+  // Wait for all promises to resolve using Promise.all
+  const results = await Promise.all(promises);
+
+  // Store the results in the nftData array
+  results.forEach((result) => {
+    nftData.push({ owner: result.tokenOwner, nftUri: result.tokenURI });
+  });
+
+  // console.log(nftData);
+  return nftData;
 }
 
-async function getOwner() {
+async function getNFTData(nftContract, index) {
+  const tokenURI = await nftContract.methods.tokenURI(index).call();
+  const tokenOwner = await nftContract.methods.ownerOf(index).call();
 
-  let i = 0;
-  const nftOwner = [];
-
-  while (true) {
-    try {
-      const owner = await nftContract.ownerOf(i);
-      nftOwner.push(owner);
-      i++;
-    } catch (error) {
-      // Break the loop when there are no more valid token IDs
-      console.log(error.message);
-      // break;
-    }
-  }
-  return nftOwner;
+  return { tokenOwner, tokenURI };
 }
 
 async function getNFTDataFromIPFS() {
 
-  const arrayData = [];
+  let nftDatas = await  getAllNFTData();
 
-  try {
-    const nftUris = await getNFT(); // Array of URIs returned by getNFT()
-    const nftOwnerAddress = await getOwner();
-    let nftId = 1;
+  for (const data of nftDatas){
+    const uriData = data.nftUri.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    // console.log(data);
+    // console.log(uriData);
 
-    for (const uri of nftUris) {
-      const nftDataUrl = uri.replace('ipfs://', 'https://ipfs.io/ipfs/');
-      
-      // Fetch data from the IPFS URL
-      const response = await axios.get(nftDataUrl);
-
-      // Parse the response data as JSON
-      const nftData = response.data;
-
-      const ownerAddress = nftOwnerAddress[nftId - 1];
-
-      const formattedData = {
-        nftId: nftId,
-        description: nftData.description,
-        image: nftData.image,
-        name: nftData.name,
-        ownerAddress: ownerAddress,
-      }
-
-      arrayData.push(formattedData);
-      nftId++;
+    try {
+      const response = await axios.get(uriData);
+      data.uriData = response.data;
+    } catch (error) {
+      console.error(`Error fetching data for ${data.nftUri}:`, error.message);
+      // You can handle errors here if necessary
     }
-
-  } catch (error) {
-    console.error('Error fetching NFT data:', error.message);
   }
-  return arrayData;
+  return nftDatas;
 }
 
-async function pushData(){
-
-  try{
-    const Data = await getNFTDataFromIPFS();
-    
-    for (const nftData of Data) {
-      const getData = [{
-        // id: nftData.nftId,
-        // description: nftData.description,
-        // image: nftData.image,
-        // name: nftData.name,
-        // ownerAddress: nftData.ownerAddress,
-          id: nftData.nftId,
-          description: nftData.description,
-          image: nftData.image,
-          name: nftData.name,
-          ownerName: nftData.ownerAddress,
-          title: 'something',
-          price: 1.55,
-          like: 160,
-          creatorImage: nftData.image,
-          ownerImage: nftData.image,
-          creatorName: 'hello',
-          auction_timer: '636234213',
-          text: 'Lorum',
-      }];
-      items_data.push(getData);
-    }
-    return;
-  }catch(error){
-    console.log("Error Message: ",error.message);
-    throw new Error;
-  }
+function renameAndAddProperties(nftDataArray) {
+	return nftDataArray.map((item,index) => {
+		return {
+			id: index,
+			description: item.uriData.description,
+			image: item.uriData.image,
+			name: item.uriData.name,
+			ownerName: item.uriData.ownerAddress,
+			title: 'something',
+			price: 1.55,
+			like: 160,
+			creatorImage: item.uriData.image,
+			ownerImage: item.uriData.image,
+			creatorName: 'hello',
+			auction_timer: '636234213',
+			text: 'Lorum',
+			// Add any other properties you need
+		};
+	});
 }
 
-async function main(){
-  try{
-    await pushData();
-    // console.log(items_data);
-    return items_data;
-  }catch(error){
-    console.log('Error Message: ', error.message);
-  }
+async function fetchAndProcessNFTData() {
+	try {
+		const nftDataWithUriData = await getNFTDataFromIPFS();
+		const modifiedNftDatas = renameAndAddProperties(nftDataWithUriData);
+		console.log(modifiedNftDatas);
+		return modifiedNftDatas;
+	} catch (error) {
+		console.error('Error fetching NFT data:', error.message);
+	}
 }
 
-module.exports = main;
+// fetchAndProcessNFTData()
+module.exports = {fetchAndProcessNFTData};
