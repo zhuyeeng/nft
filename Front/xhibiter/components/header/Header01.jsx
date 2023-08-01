@@ -35,34 +35,34 @@ export default function Header01() {
     pages: [
       {
         id: uuidv4(),
-        name: "Home 1",
+        name: "Home",
         path: "/",
       },
-      {
-        id: uuidv4(),
-        name: "Home 2",
-        path: "/home/home_2",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 3",
-        path: "/home/home_3",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 4",
-        path: "/home/home_4",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 5",
-        path: "/home/home_5",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 6",
-        path: "/home/home_6",
-      },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 2",
+      //   path: "/home/home_2",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 3",
+      //   path: "/home/home_3",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 4",
+      //   path: "/home/home_4",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 5",
+      //   path: "/home/home_5",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 6",
+      //   path: "/home/home_6",
+      // },
       {
         id: uuidv4(),
         name: "Crypto Consultant",

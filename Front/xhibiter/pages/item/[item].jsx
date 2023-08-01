@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { items_data } from "../../data/items_data";
+// import { items_data } from "../../data/items_data";
 import Auctions_dropdown from "../../components/dropdown/Auctions_dropdown";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
@@ -13,6 +13,17 @@ import Meta from "../../components/Meta";
 import { useDispatch } from "react-redux";
 import { bidsModalShow } from "../../redux/counterSlice";
 import Image from "next/image";
+
+const main = require('../../data/GetData');
+const items_data = [];
+async function testFunction(){
+  try{
+    const data = await main();
+    items_data.push(data);
+  }catch(error){
+    console.log('Error Message: ', error.message);
+  }
+}
 
 const Item = () => {
   const dispatch = useDispatch();

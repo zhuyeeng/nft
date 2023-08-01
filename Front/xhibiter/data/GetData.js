@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 const axios = require('axios');
 require('dotenv').config();
-const fs = require('fs');
+// const fs = require('fs');
 
 // Assuming you have an instance of ethers connected to your Ethereum network.
 const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963efe4');
@@ -52,7 +52,8 @@ async function getOwner() {
       i++;
     } catch (error) {
       // Break the loop when there are no more valid token IDs
-      break;
+      console.log(error.message);
+      // break;
     }
   }
   return nftOwner;
@@ -97,37 +98,48 @@ async function getNFTDataFromIPFS() {
 }
 
 async function pushData(){
+
   try{
     const Data = await getNFTDataFromIPFS();
     
     for (const nftData of Data) {
       const getData = [{
-        id: nftData.nftId,
-        description: nftData.description,
-        image: nftData.image,
-        name: nftData.name,
-        ownerAddress: nftData.ownerAddress,
+        // id: nftData.nftId,
+        // description: nftData.description,
+        // image: nftData.image,
+        // name: nftData.name,
+        // ownerAddress: nftData.ownerAddress,
+          id: nftData.nftId,
+          description: nftData.description,
+          image: nftData.image,
+          name: nftData.name,
+          ownerName: nftData.ownerAddress,
+          title: 'something',
+          price: 1.55,
+          like: 160,
+          creatorImage: nftData.image,
+          ownerImage: nftData.image,
+          creatorName: 'hello',
+          auction_timer: '636234213',
+          text: 'Lorum',
       }];
       items_data.push(getData);
     }
-
-    const jsonData = JSON.stringify(items_data, null, 2);
-    fs.writeFile('xxx.json', jsonData, (err) => {
-      if (err) {
-        console.error('Error writing to the JSON file:', err.message);
-      } else {
-        console.log('Data has been saved to xxx.json');
-      }
-    });
-
     return;
   }catch(error){
     console.log("Error Message: ",error.message);
     throw new Error;
   }
-  
 }
 
+async function main(){
+  try{
+    await pushData();
+    // console.log(items_data);
+    return items_data;
+  }catch(error){
+    console.log('Error Message: ', error.message);
+  }
+}
 
-pushData();
-// export{ items_data, pushData };
+module.exports = main;

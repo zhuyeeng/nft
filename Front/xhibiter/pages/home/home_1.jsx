@@ -9,6 +9,7 @@ import {
 import Meta from "../../components/Meta";
 
 const Home_1 = () => {
+  
   return (
     <main>
       <Meta title="Home 1" />
