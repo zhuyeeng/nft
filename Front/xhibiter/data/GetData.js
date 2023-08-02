@@ -117,10 +117,10 @@ const web3 = new Web3('https://goerli.infura.io/v3/5af30ed60a8b4765a596afccb963e
 
 // Replace 'YourContractAbi' with your NFT contract's ABI (Application Binary Interface).
 const contractAbi = require('./ABI.json');
-const contractAddress = process.env.CONTRACT_ADDRESS;
+const contractAddress = '0x3827C6a8abC59440AF9d6FD48FdE23B9A141D6c3';
 
 // Replace 'YourAccountPrivateKey' with the private key of the account you are using to interact with the contract.
-const accountPrivateKey = process.env.PRIVATE_KEY;
+const accountPrivateKey = '1b577387be7aa559921c3beb92802b32f7831e436f85fda93ee7e6c2acb70c0e';
 // console.log(accountPrivateKey);
 // Create a signer with the account's private key.
 

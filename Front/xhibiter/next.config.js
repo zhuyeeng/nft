@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   productionBrowserSourceMaps: true,
   images: {
-    domains: ["cdn.jsdelivr.net"],
+    domains: ["cdn.jsdelivr.net","ipfs.filebase.io"],
   },
 };
 

@@ -1,22 +1,33 @@
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import Image from "next/image";
 import "tippy.js/dist/tippy.css";
-import { bidsData } from "../../data/bids_data";
+// import { bidsData } from "../../data/bids_data";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { bidsModalShow } from "../../redux/counterSlice";
 import { useDispatch } from "react-redux";
 import Likes from "../likes";
+const { fetchAndProcessNFTData } = require('../../data/GetData');
 
 const BidsCarousel = () => {
+  const [modifiedNFTData, setModifiedNFTData] = useState([]);
   const dispatch = useDispatch();
   const handleclick = () => {
     console.log("clicked on ");
   };
+
+  useEffect(() => {
+    // Call the asynchronous function and set the state with the result
+    fetchAndProcessNFTData()
+      .then((data) => setModifiedNFTData(data))
+      .catch((error) => console.error('Error fetching and processing NFT data:', error.message));
+  }, []);
+
   return (
     <>
       <Swiper
@@ -44,7 +55,7 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {bidsData.map((item) => {
+        {modifiedNFTData.map((item) => {
           const { id, image, title, bid_number, eth_number, react_number } =
             item;
           const itemLink = image

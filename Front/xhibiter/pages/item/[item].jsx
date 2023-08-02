@@ -20,8 +20,8 @@ const { fetchAndProcessNFTData } = require('../../data/GetData');
 const Item = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  // const pid = router.query.item;
-  const pid = 1;
+  const pid = router.query.item;
+  // const pid = 1;
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [imageModal, setImageModal] = useState(false);
@@ -32,6 +32,8 @@ const Item = () => {
       .then((data) => setModifiedNFTData(data))
       .catch((error) => console.error('Error fetching and processing NFT data:', error.message));
   }, []);
+
+  console.log(modifiedNFTData);
 
   if (isLoading) {
     // You can return a loading state or render a loading spinner here
