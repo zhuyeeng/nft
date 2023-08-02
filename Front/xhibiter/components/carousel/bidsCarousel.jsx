@@ -5,7 +5,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import Image from "next/image";
 import "tippy.js/dist/tippy.css";
-// import { bidsData } from "../../data/bids_data";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
@@ -58,11 +57,14 @@ const BidsCarousel = () => {
         {modifiedNFTData.map((item) => {
           const { id, image, title, bid_number, eth_number, react_number } =
             item;
-          const itemLink = image
-            .split("/")
-            .slice(-1)
-            .toString()
-            .replace(".jpg", "");
+          // const itemLink = image
+          //   .split("/")
+          //   .slice(-1)
+          //   .toString()
+          //   .replace(".jpg", "");
+
+          const itemLink = id;
+
           return (
             <SwiperSlide className="text-white" key={id}>
               <article>

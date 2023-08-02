@@ -1,6 +1,6 @@
-import React, { useEffect,useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-// import { items_data } from "../../data/items_data";
+import { items_data } from "../../data/items_data";
 import Auctions_dropdown from "../../components/dropdown/Auctions_dropdown";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
@@ -13,17 +13,15 @@ import Meta from "../../components/Meta";
 import { useDispatch } from "react-redux";
 import { bidsModalShow } from "../../redux/counterSlice";
 import Image from "next/image";
-
 const { fetchAndProcessNFTData } = require('../../data/GetData');
 
-
 const Item = () => {
+  const [modifiedNFTData, setModifiedNFTData] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = router.query.item;
-  // const pid = 1;
-  const [modifiedNFTData, setModifiedNFTData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  console.log(pid)
+
   const [imageModal, setImageModal] = useState(false);
 
   useEffect(() => {
@@ -32,19 +30,6 @@ const Item = () => {
       .then((data) => setModifiedNFTData(data))
       .catch((error) => console.error('Error fetching and processing NFT data:', error.message));
   }, []);
-
-  console.log(modifiedNFTData);
-
-  if (isLoading) {
-    // You can return a loading state or render a loading spinner here
-    return <p>Loading...</p>;
-  }
-
-  // Check if the data is empty or undefined
-  if (!modifiedNFTData || modifiedNFTData.length === 0) {
-    // You can return an appropriate message or UI for when data is not available
-    return <p>No data available.</p>;
-  }
 
   return (
     <>
@@ -63,7 +48,7 @@ const Item = () => {
         </picture>
         <div className="container">
           {/* <!-- Item --> */}
-          {modifiedNFTData
+          {items_data
             .filter((item) => item.id === pid)
             .map((item) => {
               const {
@@ -354,7 +339,6 @@ const Item = () => {
                 </div>
               );
             })}
-          <ItemsTabs />
         </div>
       </section>
       {/* <!-- end item --> */}
