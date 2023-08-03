@@ -19,8 +19,8 @@ const Item = () => {
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const pid = router.query.item;
-  console.log(pid)
+  const pid = parseInt(router.query.item);
+  console.log(typeof pid);
 
   const [imageModal, setImageModal] = useState(false);
 
@@ -48,7 +48,7 @@ const Item = () => {
         </picture>
         <div className="container">
           {/* <!-- Item --> */}
-          {items_data
+          {modifiedNFTData
             .filter((item) => item.id === pid)
             .map((item) => {
               const {

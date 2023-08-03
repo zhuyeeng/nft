@@ -17,7 +17,6 @@ const accountPrivateKey = '1b577387be7aa559921c3beb92802b32f7831e436f85fda93ee7e
 
 // Create an instance of the contract using the contract ABI and contract address.
 
-
 async function getAllNFTData() {
   const nftData = [];
 
@@ -91,15 +90,17 @@ function renameAndAddProperties(nftDataArray) {
 }
 
 async function fetchAndProcessNFTData() {
+  const pid = 0;
 	try {
 		const nftDataWithUriData = await getNFTDataFromIPFS();
 		const modifiedNftDatas = renameAndAddProperties(nftDataWithUriData);
-		console.log(modifiedNftDatas[0]);
+		// console.log(modifiedNftDatas);
+    // const data = modifiedNftDatas.find(item => item.id === pid);
+    // console.log(data);
 		return modifiedNftDatas;
 	} catch (error) {
 		console.error('Error fetching NFT data:', error.message);
 	}
 }
-
-// fetchAndProcessNFTData()
+// fetchAndProcessNFTData();
 module.exports = {fetchAndProcessNFTData};
