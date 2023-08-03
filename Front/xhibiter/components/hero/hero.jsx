@@ -55,7 +55,7 @@ const hero = () => {
               <Image
                 width={560}
                 height={560}
-                src="/images/hero/hero.jpg"
+                src="/images/hero/nftIcon.png"
                 alt="hero"
                 className="hero-img mt-8 inline-block w-72 rotate-[8deg] sm:w-full lg:w-[24rem] xl:w-[35rem]"
               />

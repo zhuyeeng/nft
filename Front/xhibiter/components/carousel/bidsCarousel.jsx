@@ -57,11 +57,6 @@ const BidsCarousel = () => {
         {modifiedNFTData.map((item) => {
           const { id, image, title, bid_number, eth_number, react_number } =
             item;
-          // const itemLink = image
-          //   .split("/")
-          //   .slice(-1)
-          //   .toString()
-          //   .replace(".jpg", "");
 
           const itemLink = id;
 

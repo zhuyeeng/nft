@@ -19,6 +19,21 @@ export default function Header02() {
 
   const route = useRouter();
 
+  function connectPart(){
+    const connectWallet = async() =>{
+      if( typeof window != "undefined" && typeof window.ethereum != "undefined"){
+        try{
+          const accounts = await window.ethereum.request({method: "eth_requestAccounts"});
+          console.log(account[0]);
+        }catch(error){
+          console.error(err.message);
+        }
+      }else{
+        console.log("Please install metamask");
+      }
+    }
+  }
+
   // sticky menu
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -48,51 +63,39 @@ export default function Header02() {
     pages: [
       {
         id: uuidv4(),
-        name: "Home 1",
+        name: "Home",
         path: "/",
       },
-      {
-        id: uuidv4(),
-        name: "Home 2",
-        path: "/home/home_2",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 3",
-        path: "/home/home_3",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 4",
-        path: "/home/home_4",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 5",
-        path: "/home/home_5",
-      },
-      {
-        id: uuidv4(),
-        name: "Home 6",
-        path: "/home/home_6",
-      },
-      {
-        id: uuidv4(),
-        name: "Crypto Consultant",
-        condition: true,
-        path: "/home/home_7",
-      },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 2",
+      //   path: "/home/home_2",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 3",
+      //   path: "/home/home_3",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 4",
+      //   path: "/home/home_4",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 5",
+      //   path: "/home/home_5",
+      // },
+      // {
+      //   id: uuidv4(),
+      //   name: "Home 6",
+      //   path: "/home/home_6",
+      // },
       {
         id: uuidv4(),
         name: "NFT Game",
         condition: true,
         path: "/home/home_8",
-      },
-      {
-        id: uuidv4(),
-        name: "Dao Platform",
-        condition: true,
-        path: "/home/home_9",
       },
       {
         id: uuidv4(),
@@ -105,19 +108,7 @@ export default function Header02() {
         name: "Crypto Trading",
         condition: true,
         path: "/home/home_11",
-      },
-      {
-        id: uuidv4(),
-        name: "ICO Landing",
-        condition: true,
-        path: "/home/home_12",
-      },
-      {
-        id: uuidv4(),
-        name: "NFT Aggregator",
-        condition: true,
-        path: "/home/home_13",
-      },
+      }
     ],
   };
 
@@ -125,35 +116,6 @@ export default function Header02() {
     id: 2,
     name: "Pages",
     pages: [
-      {
-        id: uuidv4(),
-        name: "Maintenance",
-        condition: true,
-        path: "/maintenance",
-      },
-      {
-        id: uuidv4(),
-        name: "Case Studies",
-        condition: true,
-        path: "/case-studies",
-      },
-      {
-        id: uuidv4(),
-        name: "Single Case Study",
-        condition: true,
-        path: "/case-studies/case_study_1",
-      },
-      {
-        id: uuidv4(),
-        name: "Careers",
-        condition: true,
-        path: "/careers",
-      },
-      {
-        id: uuidv4(),
-        name: "Item Details",
-        path: "/item/item_20",
-      },
       {
         id: uuidv4(),
         name: "Collections Wide",
@@ -182,16 +144,6 @@ export default function Header02() {
       },
       {
         id: uuidv4(),
-        name: "User",
-        path: "/user/avatar_6",
-      },
-      {
-        id: uuidv4(),
-        name: "Edit Profile",
-        path: "/profile/user_avatar",
-      },
-      {
-        id: uuidv4(),
         name: "About",
         path: "/about",
       },
@@ -202,18 +154,8 @@ export default function Header02() {
       },
       {
         id: uuidv4(),
-        name: "Wallet",
-        path: "/wallet",
-      },
-      {
-        id: uuidv4(),
         name: "Login",
         path: "/login",
-      },
-      {
-        id: uuidv4(),
-        name: "Page 404",
-        path: "/404",
       },
       {
         id: uuidv4(),
@@ -711,7 +653,7 @@ export default function Header02() {
             {/* End metamask Wallet */}
 
             <div className="js-nav-dropdown group-dropdown relative">
-              <button className="dropdown-toggle border-jacarta-100 focus:bg-accent group hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent border-transparent bg-white/[.15]">
+              <button className="dropdown-toggle border-jacarta-100 focus:bg-accent group hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent border-transparent bg-white/[.15]" onClick={()=> testFunction()}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
