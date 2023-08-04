@@ -15,6 +15,8 @@ const initialState = {
   buyModal: false,
   propartiesModalValue: false,
   trendingCategorySorText: "",
+  defaultAccount: null,
+  userBalance: null,
 };
 
 export const counterSlice = createSlice({
@@ -159,6 +161,12 @@ export const counterSlice = createSlice({
         tempItem = state.renkingData;
       }
       state.filteredRenkingData = tempItem;
+    },
+    setDefaultAccount: (state, action) => {
+      state.defaultAccount = action.payload;
+    },
+    setUserBalance: (state, action) => {
+      state.userBalance = action.payload;
     },
   },
 });

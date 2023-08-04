@@ -11,6 +11,13 @@ import {
 } from "../../utils/daynamicNavigation";
 import { useEffect, useState } from "react";
 import WalletButton from "../wallet-btn/WalletButton";
+import { useSelector } from "react-redux";
+import React from "react";
+
+function SomeOtherComponent(){
+  const defaultAccount = useSelector((state) => state.counter.defaultAccount);
+  const userBalance = useSelector((state) => state.counter.userBalance);
+}
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);

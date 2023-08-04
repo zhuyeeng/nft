@@ -11,6 +11,13 @@ import {
 } from "../../utils/daynamicNavigation";
 import { useEffect, useState } from "react";
 import WalletButtonLight from "../wallet-btn/WalletButtonLight";
+import { useSelector } from "react-redux";
+import React from "react";
+
+function SomeOtherComponent(){
+  const defaultAccount = useSelector((state) => state.counter.defaultAccount);
+  const userBalance = useSelector((state) => state.counter.userBalance);
+}
 
 export default function Header02() {
   const [toggle, setToggle] = useState(false);
@@ -18,41 +25,6 @@ export default function Header02() {
   const [isCollapse, setCollapse] = useState(null);
 
   const route = useRouter();
-
-  function connectPart(){
-    const connectWallet = async() =>{
-      if( typeof window != "undefined" && typeof window.ethereum != "undefined"){
-        try{
-          const accounts = await window.ethereum.request({method: "eth_requestAccounts"});
-          console.log(account[0]);
-        }catch(error){
-          console.error(err.message);
-        }
-      }else{
-        console.log("Please install metamask");
-      }
-    }
-  }
-
-  // sticky menu
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.pageYOffset > 4) {
-        setScroll(true);
-      } else {
-        setScroll(false);
-      }
-    });
-  }, []);
-
-  // window resize
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 1024) {
-        setToggle(false);
-      }
-    });
-  });
 
   /* -------------------------------------------------------------------------- */
   /*                            daynamic navigations                            */
@@ -668,7 +640,7 @@ export default function Header02() {
               <div className="dropdown-menu dark:bg-jacarta-800 group-dropdown-hover:opacity-100 group-dropdown-hover:visible !-right-4 !top-[85%] !left-auto z-10 min-w-[14rem] whitespace-nowrap rounded-xl bg-white transition-all will-change-transform before:absolute before:-top-3 before:h-3 before:w-full lg:absolute lg:grid lg:!translate-y-4 lg:py-4 lg:px-2 lg:shadow-2xl hidden lg:invisible lg:opacity-0">
                 <div>
                   <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
-                    <span>0x7a86c0b06417100...</span>
+                    <span>{defaultAccount}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -690,7 +662,7 @@ export default function Header02() {
                       <use xlinkHref="/icons.svg#icon-ETH" />
                     </svg>
                     <span className="text-green text-lg font-bold">
-                      10 ETH
+                    {userBalance}
                     </span>
                   </div>
                 </div>
