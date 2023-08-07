@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { walletModalShow, setDefaultAccount, setUserBalance } from "../../redux/counterSlice";
+import { useDispatch , useSelector } from "react-redux";
+import { walletModalShow, setWalletAddress, setBalance } from "../../redux/counterSlice";
 import { useMetaMask } from "metamask-react";
 import React, { useEffect, useState } from 'react';
 import { ethers } from "ethers";
@@ -11,7 +11,7 @@ export default function WalletButton() {
 	const [userBalance, setUserBalance] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
 	const [provider, setProvider] = useState(null);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const { status, connect, account, chainId, ethereum } = useMetaMask();
 
   const connectWalletHandler = () => {
@@ -41,15 +41,16 @@ export default function WalletButton() {
     .then(balanceResult => {
       const formattedBalance = ethers.utils.formatEther(balanceResult);
       setUserBalance(formattedBalance);
-      dispath(setUserBalance(formattedBalance));
-      // setUserBalance(ethers.utils.formatEther(balanceResult));
-    })
-    };
-  }, [defaultAccount]);
+      alert(defaultAccount);
+      dispatch(setWalletAddress(defaultAccount));
+      dispatch(setBalance(formattedBalance));
+    });
+    }
+  }, [defaultAccount, dispatch]);
 
   const walletHandler = () => {
     if (status === "unavailable") {
-      dispath(walletModalShow());
+      dispatch(walletModalShow());
     }
   };
 

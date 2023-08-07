@@ -162,10 +162,10 @@ export const counterSlice = createSlice({
       }
       state.filteredRenkingData = tempItem;
     },
-    setDefaultAccount: (state, action) => {
+    setWalletAddress: (state, action) => {
       state.defaultAccount = action.payload;
     },
-    setUserBalance: (state, action) => {
+    setBalance: (state, action) => {
       state.userBalance = action.payload;
     },
   },
@@ -194,6 +194,8 @@ export const {
   updateRenkingData,
   updateRenkingDataByBlockchain,
   updateRenkingDataByPostdate,
+  setWalletAddress,
+  setBalance
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
