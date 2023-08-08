@@ -11,6 +11,7 @@ import {
 } from "../../utils/daynamicNavigation";
 import React, { useEffect, useState } from "react";
 import WalletButton from "../wallet-btn/WalletButton";
+import WalletRefresh from '../wallet-btn/WalletRefresh';
 import { useSelector } from "react-redux";
 
 function DefaultAccountComponent() {
@@ -30,17 +31,29 @@ export default function Header01() {
   const [isCollapse, setCollapse] = useState(null);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState('');
+  const [isHidden, setIsHidden] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(address)
+      .then(() => {
+        console.log('Address copied to clipboard!');
+        // You might also want to show some feedback to the user
+        // e.g., a toast notification or changing the icon color
+      })
+      .catch(err => {
+        console.error('Failed to copy address: ', err);
+      });
+  };
 
   // window resize
   useEffect(() => {
     const storedAddress = localStorage.getItem('defaultAccount');
     const storedBalance = localStorage.getItem('accountBalance');
-
-    if(storedAddress){
+    if (storedAddress) {
       setAddress(storedAddress);
     }
 
-    if(storedBalance){
+    if (storedBalance) {
       setBalance(storedBalance);
     }
 
@@ -64,31 +77,6 @@ export default function Header01() {
         name: "Home",
         path: "/",
       },
-      // {
-      //   id: uuidv4(),
-      //   name: "Home 2",
-      //   path: "/home/home_2",
-      // },
-      // {
-      //   id: uuidv4(),
-      //   name: "Home 3",
-      //   path: "/home/home_3",
-      // },
-      // {
-      //   id: uuidv4(),
-      //   name: "Home 4",
-      //   path: "/home/home_4",
-      // },
-      // {
-      //   id: uuidv4(),
-      //   name: "Home 5",
-      //   path: "/home/home_5",
-      // },
-      // {
-      //   id: uuidv4(),
-      //   name: "Home 6",
-      //   path: "/home/home_6",
-      // },
       {
         id: uuidv4(),
         name: "NFT Game",
@@ -368,7 +356,7 @@ export default function Header01() {
   };
 
   return <>
-    {/* main desktop menu sart*/}
+    <WalletRefresh />
     <header className="js-page-header fixed top-0 z-20 w-full backdrop-blur transition-colors">
       <div className="flex items-center px-6 py-6 xl:px-24 ">
         <Link className="shrink-0" href="/" >
@@ -452,14 +440,13 @@ export default function Header01() {
                       <Link
                         href={page.path}
                         className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
-                        >
+                      >
 
                         <span
-                          className={`font-display ${
-                            isChildrenPageActive(page.path, route.asPath)
-                              ? "text-accent dark:text-accent"
-                              : "text-jacarta-700"
-                          } text-sm dark:text-white`}
+                          className={`font-display ${isChildrenPageActive(page.path, route.asPath)
+                            ? "text-accent dark:text-accent"
+                            : "text-jacarta-700"
+                            } text-sm dark:text-white`}
                         >
                           {page.name}
                         </span>
@@ -506,14 +493,13 @@ export default function Header01() {
                       <Link
                         href={page.path}
                         className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
-                        >
+                      >
 
                         <span
-                          className={`font-display ${
-                            isChildrenPageActive(page.path, route.asPath)
-                              ? "!text-accent !dark:text-accent"
-                              : "text-jacarta-700 dark:text-white"
-                          } text-sm `}
+                          className={`font-display ${isChildrenPageActive(page.path, route.asPath)
+                            ? "!text-accent !dark:text-accent"
+                            : "text-jacarta-700 dark:text-white"
+                            } text-sm `}
                         >
                           {page.name}
                         </span>
@@ -563,7 +549,7 @@ export default function Header01() {
                       <Link
                         href="/"
                         className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                        >
+                      >
 
                         <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
                           {page?.icon}
@@ -612,14 +598,13 @@ export default function Header01() {
                       <Link
                         href={page?.path}
                         className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                        >
+                      >
 
                         <span
-                          className={`font-display ${
-                            isChildrenPageActive(page.path, route.asPath)
-                              ? "text-accent dark:text-accent"
-                              : "text-jacarta-700"
-                          } text-sm dark:text-white`}
+                          className={`font-display ${isChildrenPageActive(page.path, route.asPath)
+                            ? "text-accent dark:text-accent"
+                            : "text-jacarta-700"
+                            } text-sm dark:text-white`}
                         >
                           {page?.name}
                         </span>
@@ -671,8 +656,11 @@ export default function Header01() {
               </button>
               <div className="dropdown-menu dark:bg-jacarta-800 group-dropdown-hover:opacity-100 group-dropdown-hover:visible !-right-4 !top-[85%] !left-auto z-10 min-w-[14rem] whitespace-nowrap rounded-xl bg-white transition-all will-change-transform before:absolute before:-top-3 before:h-3 before:w-full lg:absolute lg:grid lg:!translate-y-4 lg:py-4 lg:px-2 lg:shadow-2xl hidden lg:invisible lg:opacity-0">
                 <div>
-                  <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
-                    <span>{address}</span>
+                  <button
+                    className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white"
+                    onClick={copyToClipboard}
+                  >
+                    <span>{`Wallet: ${address.substring(0, 3)}...${address.slice(-4)}`}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -694,14 +682,20 @@ export default function Header01() {
                       <use xlinkHref="/icons.svg#icon-ETH" />
                     </svg>
                     <span className="text-green text-lg font-bold">
-                      {balance}
+                      {isHidden ? '****' : balance}
                     </span>
+                    <button onClick={() => setIsHidden(!isHidden)}>
+                      {isHidden ?
+                        <img src="/hidden_eye.svg" alt="Hide balance" className="h-[1.25rem] w-[1.25rem] ml-2" />
+                        :
+                        <img src="/eye.svg" alt="Show balance" className="h-[1.125rem] w-[1.125rem] ml-2" />}
+                    </button>
                   </div>
                 </div>
                 <Link
                   href="/user/avatar_6"
                   className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                  >
+                >
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -721,7 +715,7 @@ export default function Header01() {
                 <Link
                   href="/profile/user_avatar"
                   className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                  >
+                >
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -741,7 +735,7 @@ export default function Header01() {
                 <Link
                   href="/login"
                   className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                  >
+                >
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -771,7 +765,7 @@ export default function Header01() {
             href="/profile/user_avatar"
             className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
             aria-label="profile"
-            >
+          >
 
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -811,9 +805,8 @@ export default function Header01() {
 
     {/* start mobile menu and it's other materials  */}
     <div
-      className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
-        toggle ? "nav-menu--is-open" : "hidden"
-      }`}
+      className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
+        }`}
     >
       <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
         <div className="dark:hidden">
@@ -905,23 +898,21 @@ export default function Header01() {
             </button>
 
             <ul
-              className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                isCollapse === home.id ? "block" : "hidden"
-              }`}
+              className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === home.id ? "block" : "hidden"
+                }`}
             >
               {home?.pages?.map((page) => (
                 <li key={page.id} onClick={() => setToggle(false)}>
                   <Link
                     href={page.path}
                     className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
-                    >
+                  >
 
                     <span
-                      className={`font-display ${
-                        isChildrenPageActive(route.asPath, page.path)
-                          ? "text-accent dark:text-accent"
-                          : "text-jacarta-700"
-                      } text-sm dark:text-white`}
+                      className={`font-display ${isChildrenPageActive(route.asPath, page.path)
+                        ? "text-accent dark:text-accent"
+                        : "text-jacarta-700"
+                        } text-sm dark:text-white`}
                     >
                       {page.name}
                     </span>
@@ -964,16 +955,15 @@ export default function Header01() {
               </i>
             </button>
             <ul
-              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                isCollapse === page.id ? "block" : "hidden"
-              }`}
+              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
+                }`}
             >
               {page?.pages?.map((page) => (
                 <li key={page.id} onClick={() => setToggle(false)}>
                   <Link
                     href={page.path}
                     className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
-                    >
+                  >
 
                     <span
                       className={
@@ -1023,9 +1013,8 @@ export default function Header01() {
               </i>
             </button>
             <ul
-              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                isCollapse === explore.id ? "block" : "hidden"
-              }`}
+              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === explore.id ? "block" : "hidden"
+                }`}
               aria-labelledby="navDropdown-1"
             >
               {explore?.pages?.map((page) => (
@@ -1033,7 +1022,7 @@ export default function Header01() {
                   <Link
                     href="/"
                     className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                    >
+                  >
 
                     <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
                       {page.icon}
@@ -1075,9 +1064,8 @@ export default function Header01() {
               </i>
             </button>
             <ul
-              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                isCollapse === resource.id ? "block" : "hidden"
-              }`}
+              className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
+                }`}
               aria-labelledby="navDropdown-4"
             >
               {resource?.pages?.map((page) => (
@@ -1085,14 +1073,13 @@ export default function Header01() {
                   <Link
                     href={page.path}
                     className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                    >
+                  >
 
                     <span
-                      className={`font-display text-jacarta-700 text-sm dark:text-white ${
-                        isChildrenPageActive(page.path, route.asPath)
-                          ? "text-accent dark:text-accent"
-                          : ""
-                      }`}
+                      className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, route.asPath)
+                        ? "text-accent dark:text-accent"
+                        : ""
+                        }`}
                     >
                       {page.name}
                     </span>

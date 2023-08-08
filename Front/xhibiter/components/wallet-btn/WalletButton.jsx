@@ -1,8 +1,8 @@
-import { useDispatch , useSelector } from "react-redux";
-import { walletModalShow, setWalletAddress, setBalance } from "../../redux/counterSlice";
-import { useMetaMask } from "metamask-react";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
 import { ethers } from "ethers";
+import { useMetaMask } from "metamask-react";
+import { walletModalShow } from "../../redux/counterSlice";
 
 export default function WalletButton() {
 
@@ -12,31 +12,28 @@ export default function WalletButton() {
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
 	const [provider, setProvider] = useState(null);
   const dispatch = useDispatch();
-  const { status, connect, account, chainId, ethereum } = useMetaMask();
+  const { status } = useMetaMask();
 
   const connectWalletHandler = () => {
-    if (window.ethereum && defaultAccount == null) {
-        // set ethers provider
-        setProvider(new ethers.providers.Web3Provider(window.ethereum));
-
-        // connect to metamask
-        window.ethereum.request({ method: 'eth_requestAccounts'})
+    if (window.ethereum && !defaultAccount) {
+      setProvider(new ethers.providers.Web3Provider(window.ethereum));
+      window.ethereum.request({ method: 'eth_requestAccounts' })
         .then(result => {
-            setConnButtonText('Wallet Connected');
-            setDefaultAccount(result[0]);
-
-            // Store address in local storage
-            localStorage.setItem('defaultAccount', result[0]);
-
-            // Now you can fetch the balance and store it in local storage too
-            // For example, using ethers.js
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            provider.getBalance(result[0]).then(balance => {
-                localStorage.setItem('accountBalance', balance.toString());
-            });
+          setConnButtonText('Wallet Connected');
+          setDefaultAccount(result[0]);
+          localStorage.setItem('defaultAccount', result[0]);
+          
+          const localProvider = new ethers.providers.Web3Provider(window.ethereum);
+          localProvider.getBalance(result[0]).then(balance => {
+            let balanceInEther = ethers.utils.formatEther(balance);
+            // Format balance as you want
+            let [integerPart, decimalPart] = balanceInEther.split('.');
+            balanceInEther = `${integerPart}.${decimalPart.substring(0, 6)}....`;
+            localStorage.setItem('accountBalance', balanceInEther);
+          });
         })
         .catch(error => {
-            setErrorMessage(error.message);
+          setErrorMessage(error.message);
         });
 
     } else if (!window.ethereum){
@@ -45,64 +42,47 @@ export default function WalletButton() {
     }
 }
 
-  // useEffect(() => {
-
-  //   if(defaultAccount){
-  //   provider.getBalance(defaultAccount)
-  //   .then(balanceResult => {
-  //     const formattedBalance = ethers.utils.formatEther(balanceResult);
-  //     setUserBalance(formattedBalance);
-  //     dispatch(setWalletAddress(defaultAccount));
-  //     dispatch(setBalance(formattedBalance));
-  //   });
-  //   }
-  // }, [defaultAccount, dispatch]);
-
   const walletHandler = () => {
     if (status === "unavailable") {
       dispatch(walletModalShow());
     }
   };
 
+  // Render logic
   if (status === "initializing") return <div>Ongoing...</div>;
 
-  if (status === "unavailable")
-    return (
-      <button
-        onClick={walletHandler}
-        className="js-wallet border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
+  const buttonClassNames = "js-wallet border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]";
+  const svgClassNames = "h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white";
+  const svgPath = (
+    <>
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z" />
+    </>
+  );
+  const renderButton = (onClickHandler) => (
+    <button
+      onClick={onClickHandler}
+      className={buttonClassNames}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width={24}
+        height={24}
+        className={svgClassNames}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width={24}
-          height={24}
-          className="h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-        >
-          <path fill="none" d="M0 0h24v24H0z" />
-          <path d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z" />
-        </svg>
-      </button>
-    );
-
-  if (status === "notConnected")
-    return (
-      <button
-        onClick={connectWalletHandler}
-        className="js-wallet border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width={24}
-          height={24}
-          className="h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-        >
-          <path fill="none" d="M0 0h24v24H0z" />
-          <path d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z" />
-        </svg>
-      </button>
-    );
+        {svgPath}
+      </svg>
+    </button>
+  );
+  
+  if (status === "unavailable") {
+    return renderButton(walletHandler);
+  }
+  
+  if (status === "notConnected") {
+    return renderButton(connectWalletHandler);
+  }
 
   if (status === "connecting") return <div>Connecting...</div>;
 
