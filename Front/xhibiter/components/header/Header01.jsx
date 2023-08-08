@@ -9,10 +9,9 @@ import {
   isChildrenPageActive,
   isParentPageActive,
 } from "../../utils/daynamicNavigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import WalletButton from "../wallet-btn/WalletButton";
 import { useSelector } from "react-redux";
-import React from "react";
 
 function DefaultAccountComponent() {
   const defaultAccount = useSelector((state) => state.counter.defaultAccount);
@@ -29,9 +28,22 @@ function UserBalanceComponent() {
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
+  const [address, setAddress] = useState('');
+  const [balance, setBalance] = useState('');
 
   // window resize
   useEffect(() => {
+    const storedAddress = localStorage.getItem('defaultAccount');
+    const storedBalance = localStorage.getItem('accountBalance');
+
+    if(storedAddress){
+      setAddress(storedAddress);
+    }
+
+    if(storedBalance){
+      setBalance(storedBalance);
+    }
+
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 1024) {
         setToggle(false);
@@ -660,7 +672,7 @@ export default function Header01() {
               <div className="dropdown-menu dark:bg-jacarta-800 group-dropdown-hover:opacity-100 group-dropdown-hover:visible !-right-4 !top-[85%] !left-auto z-10 min-w-[14rem] whitespace-nowrap rounded-xl bg-white transition-all will-change-transform before:absolute before:-top-3 before:h-3 before:w-full lg:absolute lg:grid lg:!translate-y-4 lg:py-4 lg:px-2 lg:shadow-2xl hidden lg:invisible lg:opacity-0">
                 <div>
                   <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
-                    <span><DefaultAccountComponent /></span>
+                    <span>{address}</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -682,7 +694,7 @@ export default function Header01() {
                       <use xlinkHref="/icons.svg#icon-ETH" />
                     </svg>
                     <span className="text-green text-lg font-bold">
-                      <UserBalanceComponent />
+                      {balance}
                     </span>
                   </div>
                 </div>

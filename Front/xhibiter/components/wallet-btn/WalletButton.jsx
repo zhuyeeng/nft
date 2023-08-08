@@ -15,38 +15,48 @@ export default function WalletButton() {
   const { status, connect, account, chainId, ethereum } = useMetaMask();
 
   const connectWalletHandler = () => {
-		if (window.ethereum && defaultAccount == null) {
-			// set ethers provider
-			setProvider(new ethers.providers.Web3Provider(window.ethereum));
+    if (window.ethereum && defaultAccount == null) {
+        // set ethers provider
+        setProvider(new ethers.providers.Web3Provider(window.ethereum));
 
-			// connect to metamask
-			window.ethereum.request({ method: 'eth_requestAccounts'})
-			.then(result => {
-				setConnButtonText('Wallet Connected');
-				setDefaultAccount(result[0]);
-			})
-			.catch(error => {
-				setErrorMessage(error.message);
-			});
+        // connect to metamask
+        window.ethereum.request({ method: 'eth_requestAccounts'})
+        .then(result => {
+            setConnButtonText('Wallet Connected');
+            setDefaultAccount(result[0]);
 
-		} else if (!window.ethereum){
-			console.log('Need to install MetaMask');
-			setErrorMessage('Please install MetaMask browser extension to interact');
-		}
-	}
+            // Store address in local storage
+            localStorage.setItem('defaultAccount', result[0]);
 
-  useEffect(() => {
-    if(defaultAccount){
-    provider.getBalance(defaultAccount)
-    .then(balanceResult => {
-      const formattedBalance = ethers.utils.formatEther(balanceResult);
-      setUserBalance(formattedBalance);
-      alert(defaultAccount);
-      dispatch(setWalletAddress(defaultAccount));
-      dispatch(setBalance(formattedBalance));
-    });
+            // Now you can fetch the balance and store it in local storage too
+            // For example, using ethers.js
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            provider.getBalance(result[0]).then(balance => {
+                localStorage.setItem('accountBalance', balance.toString());
+            });
+        })
+        .catch(error => {
+            setErrorMessage(error.message);
+        });
+
+    } else if (!window.ethereum){
+        console.log('Need to install MetaMask');
+        setErrorMessage('Please install MetaMask browser extension to interact');
     }
-  }, [defaultAccount, dispatch]);
+}
+
+  // useEffect(() => {
+
+  //   if(defaultAccount){
+  //   provider.getBalance(defaultAccount)
+  //   .then(balanceResult => {
+  //     const formattedBalance = ethers.utils.formatEther(balanceResult);
+  //     setUserBalance(formattedBalance);
+  //     dispatch(setWalletAddress(defaultAccount));
+  //     dispatch(setBalance(formattedBalance));
+  //   });
+  //   }
+  // }, [defaultAccount, dispatch]);
 
   const walletHandler = () => {
     if (status === "unavailable") {
