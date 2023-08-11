@@ -11,7 +11,7 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { bidsModalShow } from "../../redux/counterSlice";
 import { useDispatch } from "react-redux";
 import Likes from "../likes";
-const { fetchAndProcessNFTData } = require('../../data/nftDataFetcher');
+const { fetchCarouselNFTData } = require('../../data/nftDataFetcher');
 
 const BidsCarousel = () => {
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
@@ -22,7 +22,7 @@ const BidsCarousel = () => {
 
   useEffect(() => {
     // Call the asynchronous function and set the state with the result
-    fetchAndProcessNFTData()
+    fetchCarouselNFTData()
       .then((data) => setModifiedNFTData(data))
       .catch((error) => console.error('Error fetching and processing NFT data:', error.message));
   }, []);

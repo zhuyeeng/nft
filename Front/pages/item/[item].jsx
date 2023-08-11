@@ -13,7 +13,7 @@ import Meta from "../../components/Meta";
 import { useDispatch } from "react-redux";
 import { bidsModalShow } from "../../redux/counterSlice";
 import Image from "next/image";
-const { fetchAndProcessNFTData } = require('../../data/nftDataFetcher');
+const { fetchCarouselNFTData } = require('../../data/nftDataFetcher');
 
 const Item = () => {
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
@@ -25,7 +25,7 @@ const Item = () => {
 
   useEffect(() => {
     // Call the asynchronous function and set the state with the result
-    fetchAndProcessNFTData()
+    fetchCarouselNFTData()
       .then((data) => setModifiedNFTData(data))
       .catch((error) => console.error('Error fetching and processing NFT data:', error.message));
   }, []);

@@ -1,10 +1,10 @@
-const ethers = require('ethers');
-const axios = require('axios');
+import {ethers,providers} from 'ethers';
+import axios from 'axios';
+import { nftContractAddress, providerURL } from '../config/setting';
+import contractAbi from './abi/nftMintAbi.json';
 require('dotenv').config();
 
-const { nftContractAddress, providerURL } = require('../config/setting');
-const contractAbi = require('./abi/nftMintAbi.json');
-const provider = new ethers.providers.JsonRpcProvider(providerURL);
+const provider = new providers.JsonRpcProvider(providerURL);
 
 
 async function getAllNFTData() {
@@ -49,7 +49,7 @@ async function getNFTDataFromIPFS() {
   return nftDatas;
 }
 
-function renameAndAddProperties(nftDataArray) {
+function mapDataToCarouselFormat(nftDataArray) {
   return nftDataArray.map((item, index) => {
     return {
       id: index,
@@ -70,14 +70,52 @@ function renameAndAddProperties(nftDataArray) {
   });
 }
 
-async function fetchAndProcessNFTData() {
+function mapDataToCollectionFormat(nftDataArray) {
+  return nftDataArray.map((item, index) => {
+    return {
+      image: item.uriData.image, // adjust as needed
+      id: index, // adjust as needed
+      category: "Collectibles", // you may need to adjust or derive this
+      title: item.uriData.name,
+      nfsw: false, // you may need to adjust or derive this
+      lazyMinted: true, // you may need to adjust or derive this
+      verified: true, // you may need to adjust or derive this
+      addDate: `date #${index}`, // you may need to adjust or derive this
+      sortPrice: 5.9, // you may need to adjust or derive this
+      price: `From ${5.9} ETH`, // adjust as needed
+      bidLimit: 7, // you may need to adjust or derive this
+      bidCount: 1, // you may need to adjust or derive this
+      likes: 188, // you may need to adjust or derive this
+      creator: {
+        name: `demo #${index}`, // you may need to adjust or derive this
+        image: item.uriData.image, // adjust as needed
+      },
+      owner: {
+        name: `owner #${index}`, // you may need to adjust or derive this
+        image: item.uriData.image, // adjust as needed
+      },
+    };
+  });
+}
+
+async function fetchCarouselNFTData() {
   try {
     const nftDataWithUriData = await getNFTDataFromIPFS();
-    const modifiedNftDatas = renameAndAddProperties(nftDataWithUriData);
+    const modifiedNftDatas = mapDataToCarouselFormat(nftDataWithUriData);
+    return modifiedNftDatas;
+  } catch (error) {
+    console.error('Error fetching NFT data:', error.message);
+  }
+}
+
+async function fetchCollectionNFTData () {
+  try {
+    const nftDataWithUriData = await getNFTDataFromIPFS();
+    const modifiedNftDatas = mapDataToCollectionFormat(nftDataWithUriData);
     return modifiedNftDatas;
   } catch (error) {
     console.error('Error fetching NFT data:', error.message);
   }
 }
 // fetchAndProcessNFTData();
-module.exports = { fetchAndProcessNFTData };
+export { fetchCarouselNFTData, fetchCollectionNFTData };
