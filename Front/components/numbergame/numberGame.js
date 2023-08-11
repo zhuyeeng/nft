@@ -1,24 +1,29 @@
 import { ethers } from 'ethers';
-import { useEffect } from 'react'; 
+import { useEffect,useState } from 'react'; 
 import numberGameAbi from '../../data/abi/numberGameAbi.json';
 import { numberGameAddress } from '../../config/setting';
 import { useWallet } from '../../context/walletContext';
 
 export default function useNumberGame() {
-    const { account } = useWallet();
-    let contract;
-
+    const { account ,balance} = useWallet();
+    const [contract, setContract] = useState(null);
     useEffect(() => {
         if (window.ethereum && account) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
-            contract = new ethers.Contract(numberGameAddress, numberGameAbi, signer);
+            const createdContract = new ethers.Contract(numberGameAddress, numberGameAbi, signer);
+            console.log(createdContract);
+            setContract(createdContract);
         } else {
             console.error('MetaMask extension not found or account not connected.');
         }
     }, [account]);
 
     const joinGame = async (entryBet) => {
+        if (!contract) {
+            console.error("Contract is not initialized");
+            return;
+        }
         try {
             const valueToSend = ethers.utils.parseEther(entryBet); 
             const tx = await contract.joinGame({ value: valueToSend, gasLimit: 100000 });

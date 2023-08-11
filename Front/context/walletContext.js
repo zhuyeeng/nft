@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState,useEffect } from 'react';
 
 const WalletContext = createContext();
 
@@ -9,6 +9,18 @@ export const useWallet = () => {
 export const WalletProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
+
+  useEffect(() => {
+    const storedAccount = localStorage.getItem('defaultAccount');
+    if (storedAccount) {
+      setAccount(storedAccount);
+    }
+
+    const storedBalance = localStorage.getItem('accountBalance');
+    if (storedBalance) {
+      setBalance(storedBalance);
+    }
+  }, []);
 
   const updateAccount = (newAccount) => {
     localStorage.setItem('defaultAccount', newAccount);

@@ -19,7 +19,6 @@ const NumberGame = () => {
   // Only invoke useNumberGame once the wallet is initialized.
   const numberGameHooks = useNumberGame();
   const { joinGame, guess, withdraw } = isWalletInitialized ? numberGameHooks : {};
-  
 
   useEffect(() => {
     if (account && balance) {
@@ -29,6 +28,11 @@ const NumberGame = () => {
   }, [account, balance]);
 
   const handleJoinGame = async () => {
+
+    if (!joinGame) {
+      console.error("joinGame function is not initialized yet.");
+      return;
+    }
     try {
       await joinGame(entryBet);
       // Maybe provide some success feedback here
@@ -82,6 +86,7 @@ const NumberGame = () => {
           <div className="grid grid-cols-2 gap-4 items-center">
             <button
               className="bg-accent shadow-accent-volume hover:bg-accent-dark inline-block rounded-full py-2 px-4 w-1/2 ml-auto text-center font-semibold text-white transition-all m-2"
+              disabled={!isWalletInitialized}
               onClick={handleJoinGame}
             >Join Game
             </button>
