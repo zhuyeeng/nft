@@ -11,7 +11,7 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { bidsModalShow } from "../../redux/counterSlice";
 import { useDispatch } from "react-redux";
 import Likes from "../likes";
-const { fetchAndProcessNFTData } = require('../../data/GetData');
+const { fetchAndProcessNFTData } = require('../../data/nftDataFetcher');
 
 const BidsCarousel = () => {
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
@@ -55,7 +55,7 @@ const BidsCarousel = () => {
         className=" card-slider-4-columns !py-5"
       >
         {modifiedNFTData.map((item) => {
-          const { id, image, title, bid_number, eth_number, react_number } =
+          const { id, image, title, bid_number, eth_number } =
             item;
 
           const itemLink = id;
@@ -117,10 +117,10 @@ const BidsCarousel = () => {
                       Place bid
                     </button>
 
-                    <Likes
+                    {/* <Likes
                       like={react_number}
                       classes="flex items-center space-x-1"
-                    />
+                    /> */}
                   </div>
                 </div>
               </article>

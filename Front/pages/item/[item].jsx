@@ -13,14 +13,13 @@ import Meta from "../../components/Meta";
 import { useDispatch } from "react-redux";
 import { bidsModalShow } from "../../redux/counterSlice";
 import Image from "next/image";
-const { fetchAndProcessNFTData } = require('../../data/GetData');
+const { fetchAndProcessNFTData } = require('../../data/nftDataFetcher');
 
 const Item = () => {
   const [modifiedNFTData, setModifiedNFTData] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
   const pid = parseInt(router.query.item);
-  console.log(typeof pid);
 
   const [imageModal, setImageModal] = useState(false);
 
@@ -77,7 +76,7 @@ const Item = () => {
                         width={585}
                         height={726}
                         src={image}
-                        alt={title}
+                        alt={title || ""}
                         className="rounded-2xl cursor-pointer h-full object-cover w-full"
                       />
                     </button>
@@ -93,7 +92,7 @@ const Item = () => {
                           width={582}
                           height={722}
                           src={image}
-                          alt={title}
+                          alt={title || ""}
                           className="h-full object-cover w-full rounded-2xl"
                         />
                       </div>
@@ -144,10 +143,10 @@ const Item = () => {
 
                       {/* <!-- Likes / Actions --> */}
                       <div className="ml-auto flex items-stretch space-x-2 relative">
-                        <Likes
+                        {/* <Likes
                           like={likes}
                           classes="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 flex items-center space-x-1 rounded-xl border bg-white py-2 px-4"
-                        />
+                        /> */}
 
                         {/* <!-- Actions --> */}
                         <Auctions_dropdown classes="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 dropdown hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white" />
@@ -193,7 +192,7 @@ const Item = () => {
                               width={48}
                               height={48}
                               src={creatorImage}
-                              alt={creatorname}
+                              alt={creatorname || ""}
                               className="rounded-2lg h-12 w-12"
                               loading="lazy"
                             />
@@ -234,7 +233,7 @@ const Item = () => {
                               width={48}
                               height={48}
                               src={ownerImage}
-                              alt={ownerName}
+                              alt={ownerName || ""}
                               className="rounded-2lg h-12 w-12"
                               loading="lazy"
                             />

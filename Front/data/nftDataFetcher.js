@@ -7,9 +7,6 @@ const contractAbi = require('./abi/nftMintAbi.json');
 const provider = new ethers.providers.JsonRpcProvider(providerURL);
 
 
-
-// const wallet = new ethers.Wallet('0x' + 'YOUR_PRIVATE_KEY', provider);
-
 async function getAllNFTData() {
   const nftData = [];
   const nftContract = new ethers.Contract(nftContractAddress, contractAbi, provider);
@@ -77,7 +74,6 @@ async function fetchAndProcessNFTData() {
   try {
     const nftDataWithUriData = await getNFTDataFromIPFS();
     const modifiedNftDatas = renameAndAddProperties(nftDataWithUriData);
-        console.log(modifiedNftDatas);
     return modifiedNftDatas;
   } catch (error) {
     console.error('Error fetching NFT data:', error.message);

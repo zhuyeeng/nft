@@ -28,7 +28,7 @@ function UserBalanceComponent() {
 }
 
 export default function Header01() {
-  const { setAccount, setBalance  } = useWallet();
+  const { updateAccount, updateBalance  } = useWallet();
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
   const [localAddress, setLocalAddress] = useState('');  
