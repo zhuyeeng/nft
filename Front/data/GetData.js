@@ -83,5 +83,5 @@ async function fetchAndProcessNFTData() {
     console.error('Error fetching NFT data:', error.message);
   }
 }
-// fetchAndProcessNFTData();
+// fetchAndProcessNFTData();q
 module.exports = { fetchAndProcessNFTData };
