@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { fetchCollectionNFTData } from '../data/nftDataFetcher';
+
+>>>>>>> source/main
 const tranding_category_filter = [
   {
     id: 0,
@@ -291,6 +296,7 @@ const trendingCategoryData = [
       image: "/images/avatars/owner_3.png",
     },
   },
+<<<<<<< HEAD
   {
     image: "/images/products/item_14_lg.jpg",
     id: "Splendid Girl311",
@@ -687,3 +693,8 @@ const trendingCategoryData = [
 ];
 
 export { tranding_category_filter, trendingCategoryData };
+=======
+];
+
+export { tranding_category_filter, fetchCollectionNFTData };
+>>>>>>> source/main

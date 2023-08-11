@@ -12,7 +12,10 @@ export default function useNumberGame() {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             const createdContract = new ethers.Contract(numberGameAddress, numberGameAbi, signer);
+<<<<<<< HEAD
             console.log(createdContract);
+=======
+>>>>>>> source/main
             setContract(createdContract);
         } else {
             console.error('MetaMask extension not found or account not connected.');
@@ -37,7 +40,11 @@ export default function useNumberGame() {
         try{
             const valueToSend = ethers.utils.parseEther(betValue); 
             const guessing = await contract
+<<<<<<< HEAD
             .makeGuess(playerGuess, { value: valueToSend, from: defaultAccount, gasLimit: 120000})
+=======
+            .makeGuess(playerGuess, { value: valueToSend, gasLimit: 120000})
+>>>>>>> source/main
             await guessing.wait();
         }catch(error){
             alert(error);
@@ -47,7 +54,11 @@ export default function useNumberGame() {
     
     async function withdraw(){
         try{
+<<<<<<< HEAD
             await contract.withdraw({from:defaultAccount, gasLimit: 100000});
+=======
+            await contract.withdraw({gasLimit: 100000});
+>>>>>>> source/main
         } catch(error){
             alert(error);
         }
