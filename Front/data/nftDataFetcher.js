@@ -1,4 +1,4 @@
-import {ethers,providers} from 'ethers';
+import { ethers, providers } from 'ethers';
 import axios from 'axios';
 import { nftContractAddress, providerURL } from '../config/setting';
 import contractAbi from './abi/nftMintAbi.json';
@@ -98,6 +98,28 @@ function mapDataToCollectionFormat(nftDataArray) {
   });
 }
 
+function mapToFeatureCollectionsFormat(nftDataArray) {
+  return nftDataArray.map((item, index) => {
+    return 	{
+      id: index,
+      bigImage: item.uriData.image,
+      subImage1: item.uriData.image,
+      subImage2: item.uriData.image,
+      subImage3: item.uriData.image,
+      userImage: item.uriData.image,
+      userName: `user #${index}`,
+      itemsCount: `${100+index}`,
+      title: item.uriData.name,
+      category: 'art',
+      category: 'Collectibles',
+      category: 'photography',
+      top: true,
+      trending: true,
+      recent: true,
+    }
+  });
+}
+
 async function fetchCarouselNFTData() {
   try {
     const nftDataWithUriData = await getNFTDataFromIPFS();
@@ -107,8 +129,7 @@ async function fetchCarouselNFTData() {
     console.error('Error fetching NFT data:', error.message);
   }
 }
-
-async function fetchCollectionNFTData () {
+async function fetchCollectionNFTData() {
   try {
     const nftDataWithUriData = await getNFTDataFromIPFS();
     const modifiedNftDatas = mapDataToCollectionFormat(nftDataWithUriData);
@@ -117,5 +138,15 @@ async function fetchCollectionNFTData () {
     console.error('Error fetching NFT data:', error.message);
   }
 }
+
+async function fetchExploreCollectionNFTData() {
+  try {
+    const nftDataWithUriData = await getNFTDataFromIPFS();
+    const modifiedNftDatas = mapToFeatureCollectionsFormat(nftDataWithUriData);
+    return modifiedNftDatas;
+  } catch (error) {
+    console.error('Error fetching NFT data:', error.message);
+  }
+}
 // fetchAndProcessNFTData();
-export { fetchCarouselNFTData, fetchCollectionNFTData };
+export { fetchCarouselNFTData, fetchCollectionNFTData ,fetchExploreCollectionNFTData};
