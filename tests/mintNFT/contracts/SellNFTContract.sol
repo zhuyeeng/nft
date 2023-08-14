@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "./TestNFT_sec.sol"; // Import the original NFT contract
+import "./NftMintContract.sol"; // Import the original NFT contract
 
 contract NFTMarketplace {
     TestNFT private nftContract;

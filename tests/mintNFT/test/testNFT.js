@@ -3,13 +3,13 @@ const { expect } = require("chai");
 
         
 
-describe("NumberGame Contract", function(){
+describe("NFT Contract", function(){
     async function deployToken(){
         const [owner,Player1,Player2] = await ethers.getSigners();
         const uri = "https://ipfs.filebase.io/ipfs/QmR53eKpCo87CewvRkY6EwkssvMc7ppNZNVEJNnGe9CNbX"
         const defaultRoyaltyFees = ethers.utils.parseUnits('5');
-        const MintNFT = await ethers.getContractFactory("NftMintContract");
-        const SellNFT= await ethers.getContractFactory("SellNFTContract");
+        const MintNFT = await ethers.getContractFactory("TestNFT");
+        const SellNFT= await ethers.getContractFactory("NFTMarketplace");
         const contract = await MintNFT.deploy();
         console.log("Master address:", await contract.address);
     
@@ -24,7 +24,9 @@ describe("NumberGame Contract", function(){
     };
 
     it("Reach max supply", async function(){
-        const {contract,Player1,Player2,uri} = await loadFixture(deployToken);
-        await expect(contract.connect(Player1).safeMint(Player2,uri)).to.be.revertedWith("Sorry, All NFT have been minted");
+        const {contract,Player1,owner,Player2,uri} = await loadFixture(deployToken);
+        console.log(Player2);
+        console.log(uri);
+        await expect(contract.connect(owner).safeMint(owner,uri)).to.be.revertedWith("Sorry, All NFT have been minted");
     });
 });
