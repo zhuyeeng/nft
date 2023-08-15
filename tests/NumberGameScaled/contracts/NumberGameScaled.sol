@@ -201,9 +201,9 @@ contract NumberGame is ReentrancyGuard {
     }
 
 
-    function generateTargetNumber() private pure returns(uint256) {
-    // uint256 randomNumber = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 10) + 1;
-        return 1;
+    function generateTargetNumber() private view  returns(uint256) {
+    uint256 randomNumber = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 10) + 1;
+        return randomNumber;
     }
 
     function resetGame(uint16 gameId) external onlyOwner {

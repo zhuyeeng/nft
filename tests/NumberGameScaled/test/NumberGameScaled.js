@@ -19,98 +19,98 @@ describe("NumberGame", function () {
 
     });
 
-    // describe("createGame", function () {
-    //     it("should create a new game with the correct initial state", async function () {
-    //         const createGameTx = await numberGame.createGame();
+    describe("createGame", function () {
+        it("should create a new game with the correct initial state", async function () {
+            const createGameTx = await numberGame.createGame();
 
-    //         const receipt = await createGameTx.wait();
-    //         const gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
+            const receipt = await createGameTx.wait();
+            const gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
 
-    //         const game = await numberGame.games(gameId);
+            const game = await numberGame.games(gameId);
 
-    //         expect(game.currentState).to.equal(0); // GameState.NewGame
-    //         expect(game.player1).to.equal(ethers.constants.AddressZero);
-    //         expect(game.player2).to.equal(ethers.constants.AddressZero);
-    //         expect(game.minimumBet).to.equal(ethers.utils.parseEther("0.05"));
-    //         expect(game.p1BetStatus).to.equal(false);
-    //         expect(game.p2BetStatus).to.equal(false);
-    //     });
-    // });
+            expect(game.currentState).to.equal(0); // GameState.NewGame
+            expect(game.player1).to.equal(ethers.constants.AddressZero);
+            expect(game.player2).to.equal(ethers.constants.AddressZero);
+            expect(game.minimumBet).to.equal(ethers.utils.parseEther("0.05"));
+            expect(game.p1BetStatus).to.equal(false);
+            expect(game.p2BetStatus).to.equal(false);
+        });
+    });
 
-    // describe("joinGame", function () {
+    describe("joinGame", function () {
 
-    //     it("should not allow owner to join the game", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         console.log(gameId);
-    //         await expect(
-    //             numberGame.connect(owner).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
-    //         ).to.be.revertedWith("Owner cannot join the game");
-    //     });
+        it("should not allow owner to join the game", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            console.log(gameId);
+            await expect(
+                numberGame.connect(owner).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
+            ).to.be.revertedWith("Owner cannot join the game");
+        });
 
-    //     it("should not allow joining with less than minimum bet", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await expect(
-    //             numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.01") })
-    //         ).to.be.revertedWith("Please send more than default minimum bet to join the game");
-    //     });
+        it("should not allow joining with less than minimum bet", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await expect(
+                numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.01") })
+            ).to.be.revertedWith("Please send more than default minimum bet to join the game");
+        });
 
-    //     it("should allow player1 to join and set the minimum bet", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         const game = await numberGame.games(gameId);
-    //         expect(game.player1).to.equal(addr1.address);
-    //         expect(game.minimumBet).to.equal(ethers.utils.parseEther("0.05"));
-    //         expect(game.currentState).to.equal(1);  // GameState.WaitingForPlayer
-    //     });
+        it("should allow player1 to join and set the minimum bet", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            const game = await numberGame.games(gameId);
+            expect(game.player1).to.equal(addr1.address);
+            expect(game.minimumBet).to.equal(ethers.utils.parseEther("0.05"));
+            expect(game.currentState).to.equal(1);  // GameState.WaitingForPlayer
+        });
 
-    //     it("should not allow player1 to join the game again", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         await expect(
-    //             numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
-    //         ).to.be.revertedWith("You have already joined the game");
-    //     });
+        it("should not allow player1 to join the game again", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            await expect(
+                numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
+            ).to.be.revertedWith("You have already joined the game");
+        });
 
-    //     it("should not allow player2 to join with mismatched bet", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.06") });
-    //         await expect(
-    //             numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
-    //         ).to.be.revertedWith("Insufficient bet, please match minimum bet");
-    //     });
+        it("should not allow player2 to join with mismatched bet", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.06") });
+            await expect(
+                numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
+            ).to.be.revertedWith("Insufficient bet, please match minimum bet");
+        });
 
-    //     it("should allow player2 to join and change the state to BothPlayersJoined", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         const game = await numberGame.games(gameId);
-    //         expect(game.player2).to.equal(addr2.address);
-    //         expect(game.currentState).to.equal(2);  // GameState.BothPlayersJoined
-    //     });
+        it("should allow player2 to join and change the state to BothPlayersJoined", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            const game = await numberGame.games(gameId);
+            expect(game.player2).to.equal(addr2.address);
+            expect(game.currentState).to.equal(2);  // GameState.BothPlayersJoined
+        });
 
-    //     it("should not allow a third player to join", async function () {
-    //         const tx = await numberGame.createGame();
-    //         const receipt = await tx.wait();
-    //         const gameId = receipt.events[0].args.gameId;
-    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-    //         await expect(
-    //             numberGame.connect(addrs[0]).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
-    //         ).to.be.revertedWith("game is either ended or full");
-    //     });
-    // });
+        it("should not allow a third player to join", async function () {
+            const tx = await numberGame.createGame();
+            const receipt = await tx.wait();
+            const gameId = receipt.events[0].args.gameId;
+            await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+            await expect(
+                numberGame.connect(addrs[0]).joinGame(gameId, { value: ethers.utils.parseEther("0.05") })
+            ).to.be.revertedWith("game is either ended or full");
+        });
+    });
 
     describe("makeGuess and finalizeGame", function () {
         it("should allow players to make guesses, place bets, and automatically finalize the game", async function () {
@@ -173,8 +173,8 @@ describe("NumberGame", function () {
             await numberGame.connect(addr2).makeGuess(gameId, 2, { value: ethers.utils.parseEther("0.05") });
     
             const balanceAfter = await ethers.provider.getBalance(addr1.address);
-            // deduct gas cost
-        expect(balanceAfter.sub(balanceBefore)).to.be.gt(ethers.utils.parseEther("0.09"));
+            // deduct gas cost, please set the generateTargetNumber to nonrandom in contract to test this
+            expect(balanceAfter.sub(balanceBefore)).to.be.gt(ethers.utils.parseEther("0.09"));
         });
 
         
@@ -189,5 +189,97 @@ describe("NumberGame", function () {
             .to.be.revertedWith("Guess must be between 1 and 10");
     });
     });
+
+    describe("NumberGame administrative functions", function () {
+        let tx, receipt,gameId;
+        describe("getTargetNumber", function () {
+            it("should allow owner to get the target number", async function () {
+                tx = await numberGame.createGame();
+                receipt = await tx.wait();
+                gameId = receipt.events[0].args.gameId;
+                const targetNumber = await numberGame.getTargetNumber(gameId);
+                expect(targetNumber).to.be.at.least(1);
+                expect(targetNumber).to.be.at.most(10);  // If 10 is your maximum target number
+            });
+    
+            it("should not allow non-owner to get the target number", async function () {
+                // Use a non-owner address (like addr1)
+                await expect(numberGame.connect(addr1).getTargetNumber(gameId)).to.be.revertedWith("Not authorized");
+            });
+        });
+    
+        describe("setNextGameId", function () {
+
+            const GameState = {
+                NewGame: 0,
+                WaitingForPlayer: 1,
+                BothPlayersJoined: 2,
+                AwaitingNewBets: 3,
+                GameEnded: 4
+            };
+            // Testing boundary conditions
+            it("should successfully create a game and increment nextGameId", async function () {
+                await numberGame.createGame();
+                const currentNextGameId = await numberGame.nextGameId();
+                await numberGame.setNextGameId(currentNextGameId.sub(1));
+                const updatedNextGameId = await numberGame.nextGameId();
+                expect(updatedNextGameId).to.equal(currentNextGameId.sub(1));
+            });
+
+            it("should revert if trying to set next game ID to the current value", async function () {
+                const currentNextGameId = await numberGame.nextGameId();
+                await expect(numberGame.setNextGameId(currentNextGameId)).to.be.revertedWith("Invalid game ID");
+            });
+
+            it("should revert if trying to set next game ID to zero", async function () {
+                await expect(numberGame.setNextGameId(0)).to.be.revertedWith("Invalid game ID");
+            });
+
+            // Testing behavior in a series of operations
+            it("should correctly create a game after consecutive calls to setNextGameId", async function () {
+                await numberGame.createGame();
+                await numberGame.createGame();
+                const originalNextGameId = await numberGame.nextGameId(); //3
+                // Lower the nextGameId
+                await numberGame.setNextGameId(originalNextGameId.sub(2)); // 1
+
+                tx = await numberGame.createGame();
+                receipt = await tx.wait();
+                const newGameId = receipt.events[0].args.gameId;  //1
+                // Check if the game has the ID we expect (which is now originalNextGameId - 2)
+                expect(newGameId).to.equal(originalNextGameId.sub(2));  // 1
+                
+                const gameAfterCreation = await numberGame.games(newGameId);    //3
+                expect(gameAfterCreation.currentState).to.equal(GameState.NewGame);
+            });
+
+            it("should increment nextGameId after game creation", async function () {
+                const originalNextGameId = await numberGame.nextGameId();
+
+                await numberGame.createGame();
+
+                const incrementedNextGameId = await numberGame.nextGameId();
+                expect(incrementedNextGameId).to.equal(originalNextGameId.add(1));
+            });
+
+            // Check game creation with no interference to nextGameId
+            it("should create a game and set its properties correctly", async function () {
+                tx = await numberGame.createGame();
+                receipt = await tx.wait();
+                gameId = receipt.events[0].args.gameId;
+
+                const gameAfterCreation = await numberGame.games(gameId);
+                expect(gameAfterCreation.currentState).to.equal(GameState.NewGame);
+                expect(gameAfterCreation.player1).to.equal(ethers.constants.AddressZero);
+                expect(gameAfterCreation.player2).to.equal(ethers.constants.AddressZero);
+                expect(gameAfterCreation.p1BetStatus).to.be.false;
+                expect(gameAfterCreation.p2BetStatus).to.be.false;
+
+                const targetNumber = await numberGame.getTargetNumber(gameId);
+                expect(targetNumber).to.be.within(1, 10);  // Assuming your `generateTargetNumber` function generates a number between 1 to 10 inclusive
+            });
+        });
+    });
+    
 
 });
