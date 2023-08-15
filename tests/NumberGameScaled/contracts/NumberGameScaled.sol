@@ -18,7 +18,6 @@ contract NumberGame is ReentrancyGuard {
         uint256 player1Bet;
         uint256 player2Bet;
         uint256 minimumBet;
-        uint8 targetNumber;
         uint8 player1Guess;
         uint8 player2Guess;
         GameState currentState;
@@ -30,9 +29,12 @@ contract NumberGame is ReentrancyGuard {
     uint256 public defaultMinBet;
     int256 public unclaimedBalance;
 
+    event GameCreated(uint256 gameId);
 
     // gameId -> Game mapping
-    mapping(uint16 => Game) public games;
+    mapping(uint256 => Game) public games;
+    mapping(uint256 => uint8) private targetNumbers;
+
 
     // Tracks the next game ID
     uint256 public nextGameId = 1;
@@ -48,41 +50,48 @@ contract NumberGame is ReentrancyGuard {
     }
 
 
-    function createGame() public returns(uint16) {
-    uint256 gameId = nextGameId++;  // Reserve the current ID and then increment it for the next game.
+    function createGame() public returns(uint256) {
+        uint256 gameId = nextGameId++;  // Reserve the current ID and then increment it for the next game.
 
         require(games[gameId].currentState == GameState.GameEnded ||
-         games[gameId].currentState == GameState.NewGame,
-        "create game - game state error");
+            games[gameId].currentState == GameState.NewGame,
+            "create game - game state error");
 
         games[gameId] = Game({
-            currentState: GameState.NewGame,
             player1: payable(address(0)),
             player2: payable(address(0)),
-            targetNumber: generateTargetNumber(),
+            player1Bet: 0,            // Default value
+            player2Bet: 0,            // Default value
             minimumBet: defaultMinBet,
+            player1Guess: 0,          // Default value
+            player2Guess: 0,          // Default value
+            currentState: GameState.NewGame,
             p1BetStatus: false,
             p2BetStatus: false
         });
+        
+        targetNumbers[gameId] = uint8(generateTargetNumber());
+        emit GameCreated(gameId);
         return gameId;
     }
 
 
+    receive() external payable {
+        unclaimedBalance += int256(msg.value);
+    }
+
+
     function joinGame(uint16 gameId) public payable {
-        Game storage game = games[gameId];
 
-        require(game.currentState == GameState.NewGame ||
-            game.currentState == GameState.WaitingForPlayer,
-            "game is either ended or full"
-        );
-
-        require(game.player1 == address(0) || game.player2 == address(0),
-            "Game is already full"
-        );
-        require(msg.sender != game.player1, "You have already joined the game");
         require(msg.sender != owner, "Owner cannot join the game");
         require(msg.value >= defaultMinBet,
             "Please send more than default minimum bet to join the game"
+        );
+        Game storage game = games[gameId];
+        require(msg.sender != game.player1, "You have already joined the game");
+        require(game.currentState == GameState.NewGame ||
+            game.currentState == GameState.WaitingForPlayer,
+            "game is either ended or full"
         );
 
         if (game.player1 == address(0)) {
@@ -107,7 +116,7 @@ contract NumberGame is ReentrancyGuard {
         require(game.currentState == GameState.BothPlayersJoined ||
             game.currentState == GameState.AwaitingNewBets, "game not in active state");
         require(guessNumber > 0 && guessNumber <= 10, "Guess must be between 1 and 10");
-        require(msg.value >= game.minimumBet, "Insufficient bet, please match minimum bet");
+        require(msg.value == game.minimumBet, "Please match bet amount");
 
         bool isPlayer1 = (msg.sender == game.player1);
 
@@ -132,20 +141,21 @@ contract NumberGame is ReentrancyGuard {
     function finalizeGame(uint16 gameId) internal {
         Game storage game = games[gameId];
 
-        if (game.player1Guess == game.targetNumber && game.player2Guess == game.targetNumber) {
+         uint8 currentTargetNumber = targetNumbers[gameId];
+        if (game.player1Guess == currentTargetNumber && game.player2Guess == currentTargetNumber) {
             game.currentState = GameState.GameEnded;
             payable(game.player1).transfer(game.player1Bet);
             payable(game.player2).transfer(game.player2Bet);
             game.player1Bet = 0;
             game.player2Bet = 0;
-        } else if (game.player1Guess == game.targetNumber) {
+        } else if (game.player1Guess == currentTargetNumber) {
             game.currentState = GameState.GameEnded;
-            payable(game.player1).transfer(game.player1Bet+game.player2Bet);
+            payable(game.player1).transfer(game.player1Bet + game.player2Bet);
             game.player1Bet = 0;
             game.player2Bet = 0;
-        } else if (game.player2Guess == game.targetNumber) {
+        } else if (game.player2Guess == currentTargetNumber) {
             game.currentState = GameState.GameEnded;
-            payable(game.player2).transfer(game.player1Bet+game.player2Bet);
+            payable(game.player2).transfer(game.player1Bet + game.player2Bet);
             game.player1Bet = 0;
             game.player2Bet = 0;
         } else {
@@ -155,17 +165,16 @@ contract NumberGame is ReentrancyGuard {
     }
 
     function getTargetNumber(uint16 gameId) public view returns(uint256) {
-        require(msg.sender == owner,
-            "Only the owner can view the target number");
-        return games[gameId].targetNumber;
+    require(msg.sender == owner, "Not authorized");
+    return targetNumbers[gameId];
     }
 
-    function withdraw(uint16 gameId) public nonReentrant {
+    function withdraw(uint16 gameId) public nonReentrant{
         Game storage game = games[gameId];
 
         require(msg.sender == game.player1 || msg.sender == game.player2, "Not a player");
         require(game.currentState != GameState.GameEnded ||
-         game.currentState != GameState.NewGame, "Game has already ended");
+            game.currentState != GameState.NewGame, "Game has already ended");
         require(game.player1Bet > 0 && game.player2Bet > 0, "Player must have balance");
         game.player1Bet = 0;
         game.player2Bet = 0;
@@ -192,9 +201,9 @@ contract NumberGame is ReentrancyGuard {
     }
 
 
-    function generateTargetNumber() private view returns(uint256) {
-    uint256 randomNumber = (uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao))) % 10) + 1;
-        return randomNumber;
+    function generateTargetNumber() private pure returns(uint256) {
+    // uint256 randomNumber = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % 10) + 1;
+        return 1;
     }
 
     function resetGame(uint16 gameId) external onlyOwner {
@@ -210,8 +219,8 @@ contract NumberGame is ReentrancyGuard {
         // Update unclaimed balance
         game.player1Bet = 0;
         game.player2Bet = 0;
-        unclaimedBalance += game.player1Bet;
-        unclaimedBalance += game.player2Bet;
+        unclaimedBalance += int256(game.player1Bet);
+        unclaimedBalance += int256(game.player2Bet);
 
         game.currentState = GameState.GameEnded;
     }
