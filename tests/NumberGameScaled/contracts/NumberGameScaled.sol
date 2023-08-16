@@ -171,10 +171,9 @@ contract NumberGame is ReentrancyGuard {
 
     function withdraw(uint16 gameId) public nonReentrant{
         Game storage game = games[gameId];
-
         require(msg.sender == game.player1 || msg.sender == game.player2, "Not a player");
-        require(game.currentState != GameState.GameEnded ||
-            game.currentState != GameState.NewGame, "Game has already ended");
+        require(game.currentState != GameState.GameEnded &&
+            game.currentState != GameState.NewGame, "Game not in valid state");
         require(game.player1Bet > 0 && game.player2Bet > 0, "Player must have balance");
         game.player1Bet = 0;
         game.player2Bet = 0;
