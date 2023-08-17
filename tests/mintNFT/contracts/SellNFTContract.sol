@@ -6,7 +6,7 @@ import "./NftMintContract.sol"; // Import the original NFT contract
 contract NFTMarketplace {
     TestNFT private nftContract;
     address public owner;
-    
+
     uint256 public royaltyPercentage; // Royalty fee percentage
 
     struct NftListing {
@@ -16,6 +16,7 @@ contract NFTMarketplace {
     }
 
     NftListing[] public nftListings;
+    event RoyaltyFeeCalculated(address indexed seller, uint256 indexed tokenId, uint256 royaltyFee);
 
     mapping(uint256 => address) public approvedSellers;
 
@@ -37,14 +38,14 @@ contract NFTMarketplace {
         require(nftContract.ownerOf(_tokenId) == msg.sender, "Only the owner can list this NFT");
 
         // Convert the decimal price to wei (assuming you want to multiply by 10^18 for Ether to wei conversion)
-        uint256 priceInWei = _priceDecimal * 10**18;
+        // uint256 priceInWei = _priceDecimal * 10**18;
 
         nftListings.push(NftListing({
             seller: msg.sender,
             tokenId: _tokenId,
-            price: priceInWei
+            price: _priceDecimal
         }));
-        emit NftListed(msg.sender, _tokenId, priceInWei);
+        emit NftListed(msg.sender, _tokenId, _priceDecimal);
     }
 
     function buyNFT(uint256 _listingIndex) external payable {
@@ -52,19 +53,25 @@ contract NFTMarketplace {
         require(msg.value >= listing.price, "Insufficient funds sent");
         require(msg.sender != listing.seller, "You cannot buy your own NFT");
 
-        // Transfer NFT ownership
-        nftContract.safeTransferFrom(listing.seller, msg.sender, listing.tokenId);
-
-        // Calculate and send royalty fee
+        // Calculate and emit royalty fee
         uint256 royaltyFee = (listing.price * royaltyPercentage) / 100;
-        payable(listing.seller).transfer(listing.price - royaltyFee);
+        // emit FeeCalculated(listing.seller, listing.tokenId, listing.price, royaltyFee);
 
-        // Emit event
-        emit NftSold(listing.seller, msg.sender, listing.tokenId, listing.price);
+        uint256 amountToSeller = listing.price - royaltyFee;
+
+        // Transfer amount to the seller and emit event
+        payable(listing.seller).transfer(amountToSeller);
+        // emit TransferToSeller(listing.seller, listing.tokenId, amountToSeller);
+
+        // Transfer NFT ownership and emit event
+        nftContract.safeTransferFrom(listing.seller, msg.sender, listing.tokenId);
+        // emit NFTTransferred(listing.seller, msg.sender, listing.tokenId);
 
         // Remove the listing
         delete nftListings[_listingIndex];
     }
+
+
 
     function setRoyaltyPercentage(uint256 _newRoyaltyPercentage) external onlyOwner {
         require(_newRoyaltyPercentage <= 100, "Royalty percentage must be <= 100");

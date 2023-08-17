@@ -10,17 +10,22 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 contract TestNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-    uint256 MAX_SUPPLY = 1000;
+    uint256 public MAX_SUPPLY = 10;
 
     constructor() ERC721("TestNFT", "TN") {}
 
     function safeMint(address to, string memory uri) public {
+
+        // require(to != address(0), "Invalid user address");
+
+        // require(bytes(uri).length > 0 && bytes(uri).length <= 256, "Invalid URI format");
         
         uint256 tokenId = _tokenIdCounter.current();
-        require(tokenId <= MAX_SUPPLY,"Sorry, All NFT have been minted");
+        require(tokenId < MAX_SUPPLY,"Sorry, All NFT have been minted");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
