@@ -30,6 +30,7 @@ contract NumberGame is ReentrancyGuard {
     int256 public unclaimedBalance;
 
     event GameCreated(uint256 gameId);
+    event Withdrawn(uint16 gameId, address indexed player, uint256 playerAmount, uint256 opponentAmount);
 
     // gameId -> Game mapping
     mapping(uint256 => Game) public games;
@@ -171,18 +172,23 @@ contract NumberGame is ReentrancyGuard {
 
     function withdraw(uint16 gameId) public nonReentrant{
         Game storage game = games[gameId];
+        require(game.player1 != address(0) || game.player2 != address(0), "Game does not exist");
         require(msg.sender == game.player1 || msg.sender == game.player2, "Not a player");
         require(game.currentState != GameState.GameEnded &&
             game.currentState != GameState.NewGame, "Game not in valid state");
         require(game.player1Bet > 0 && game.player2Bet > 0, "Player must have balance");
+        uint256 player1BetAmount = game.player1Bet;
+        uint256 player2BetAmount = game.player2Bet;
         game.player1Bet = 0;
         game.player2Bet = 0;
         if (msg.sender == game.player1) {
-            _withdraw(game.player1, game.player1Bet);
-            payable(game.player2).transfer(game.player2Bet);
+            emit Withdrawn(gameId, msg.sender, player1BetAmount / 2, player2BetAmount);
+            _withdraw(game.player1, player1BetAmount/2);
+            payable(game.player2).transfer(player2BetAmount);
         } else if (msg.sender == game.player2) {
-            _withdraw(game.player2, game.player2Bet);
-            payable(game.player1).transfer(game.player1Bet);
+            emit Withdrawn(gameId, msg.sender, player2BetAmount / 2, player1BetAmount);
+            _withdraw(game.player2, player2BetAmount/2);
+            payable(game.player1).transfer(player1BetAmount);
         }
         game.currentState = GameState.GameEnded;
     }
@@ -224,8 +230,7 @@ contract NumberGame is ReentrancyGuard {
         game.currentState = GameState.GameEnded;
     }
 
-    function _withdraw(address payable player, uint256 betAmount) private {
-        uint256 amount = betAmount / 2;  // Calculate 50% of the bet amount
+    function _withdraw(address payable player, uint256 amount) private {
         unclaimedBalance += int256(amount);
         player.transfer(amount);
     }
