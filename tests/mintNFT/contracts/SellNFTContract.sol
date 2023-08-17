@@ -37,9 +37,6 @@ contract NFTMarketplace {
     function listNFT(uint256 _tokenId, uint256 _priceDecimal) external {
         require(nftContract.ownerOf(_tokenId) == msg.sender, "Only the owner can list this NFT");
 
-        // Convert the decimal price to wei (assuming you want to multiply by 10^18 for Ether to wei conversion)
-        // uint256 priceInWei = _priceDecimal * 10**18;
-
         nftListings.push(NftListing({
             seller: msg.sender,
             tokenId: _tokenId,
@@ -55,17 +52,14 @@ contract NFTMarketplace {
 
         // Calculate and emit royalty fee
         uint256 royaltyFee = (listing.price * royaltyPercentage) / 100;
-        // emit FeeCalculated(listing.seller, listing.tokenId, listing.price, royaltyFee);
 
         uint256 amountToSeller = listing.price - royaltyFee;
 
         // Transfer amount to the seller and emit event
         payable(listing.seller).transfer(amountToSeller);
-        // emit TransferToSeller(listing.seller, listing.tokenId, amountToSeller);
 
         // Transfer NFT ownership and emit event
         nftContract.safeTransferFrom(listing.seller, msg.sender, listing.tokenId);
-        // emit NFTTransferred(listing.seller, msg.sender, listing.tokenId);
 
         // Remove the listing
         delete nftListings[_listingIndex];

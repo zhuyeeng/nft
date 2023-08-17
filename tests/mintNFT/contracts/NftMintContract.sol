@@ -7,8 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-
-
 contract TestNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     using Counters for Counters.Counter;
@@ -19,10 +17,6 @@ contract TestNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     constructor() ERC721("TestNFT", "TN") {}
 
     function safeMint(address to, string memory uri) public {
-
-        // require(to != address(0), "Invalid user address");
-
-        // require(bytes(uri).length > 0 && bytes(uri).length <= 256, "Invalid URI format");
         
         uint256 tokenId = _tokenIdCounter.current();
         require(tokenId < MAX_SUPPLY,"Sorry, All NFT have been minted");
@@ -32,7 +26,6 @@ contract TestNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     // The following functions are overrides required by Solidity.
-
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
         override(ERC721, ERC721Enumerable)
