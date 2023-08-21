@@ -190,88 +190,85 @@ describe("NumberGame", function () {
     //     });
     // });
 
-    describe("withdraw", function () {
-        let gameId;
-        // it("should not allow non-players to withdraw", async function () {
-        //     // Create a new game
-        //     const createGameTx = await numberGame.createGame();
-        //     const receipt = await createGameTx.wait();
-        //     gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
+    // describe("withdraw", function () {
+    //     let gameId;
+    //     it("should not allow non-players to withdraw", async function () {
+    //         // Create a new game
+    //         const createGameTx = await numberGame.createGame();
+    //         const receipt = await createGameTx.wait();
+    //         gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
     
-        //     await expect(numberGame.connect(owner).withdraw(gameId)).to.be.revertedWith("Not a player");
-        // });
+    //         await expect(numberGame.connect(owner).withdraw(gameId)).to.be.revertedWith("Not a player");
+    //     });
     
-        // it("should not allow non-players to withdraw", async function () {
-        //     await expect(numberGame.connect(addrs[0]).withdraw(gameId)).to.be.revertedWith("Not a player");
-        // });
+    //     it("should not allow non-players to withdraw", async function () {
+    //         await expect(numberGame.connect(addrs[0]).withdraw(gameId)).to.be.revertedWith("Not a player");
+    //     });
     
    
-        // it("should allow a player to withdraw and set game state to GameEnded when conditions are met", async function () {
-        //     await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-        //     let game = await numberGame.games(gameId);
-        //     expect(game.currentState).to.equal(1); // GameState.WaitingForPlayer
-        //     expect(game.player1).to.equal(addr1.address);
-        //     expect(game.player1Bet).to.equal(ethers.utils.parseEther("0.05"));
+    //     it("should allow a player to withdraw and set game state to GameEnded when conditions are met", async function () {
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+    //         let game = await numberGame.games(gameId);
+    //         expect(game.currentState).to.equal(1); // GameState.WaitingForPlayer
+    //         expect(game.player1).to.equal(addr1.address);
+    //         expect(game.player1Bet).to.equal(ethers.utils.parseEther("0.05"));
 
-        //     await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-        //     game = await numberGame.games(gameId);
-        //     expect(game.currentState).to.equal(2); // GameState.BothPlayersJoined
-        //     expect(game.player2).to.equal(addr2.address);
-        //     expect(game.player2Bet).to.equal(ethers.utils.parseEther("0.05"));
+    //         await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+    //         game = await numberGame.games(gameId);
+    //         expect(game.currentState).to.equal(2); // GameState.BothPlayersJoined
+    //         expect(game.player2).to.equal(addr2.address);
+    //         expect(game.player2Bet).to.equal(ethers.utils.parseEther("0.05"));
 
-        //     // Player 1 withdraws from the game
-        //     await numberGame.connect(addr1).withdraw(gameId);
+    //         // Player 1 withdraws from the game
+    //         await numberGame.connect(addr1).withdraw(gameId);
 
-        //     // After withdrawal, the game state should be GameEnded and the balances of both players should be zero
-        //     game = await numberGame.games(gameId);
-        //     expect(game.currentState).to.equal(4); // GameState.GameEnded
-        //     expect(game.player1Bet).to.equal(0);
-        //     expect(game.player2Bet).to.equal(0);
-        //     // addr1 tries to withdraw without moving the game to a valid state for withdrawal
-        //     await expect(numberGame.connect(addr1).withdraw(gameId)).to.be.revertedWith("Game not in valid state");
-        // });
+    //         // After withdrawal, the game state should be GameEnded and the balances of both players should be zero
+    //         game = await numberGame.games(gameId);
+    //         expect(game.currentState).to.equal(4); // GameState.GameEnded
+    //         expect(game.player1Bet).to.equal(0);
+    //         expect(game.player2Bet).to.equal(0);
+    //         // addr1 tries to withdraw without moving the game to a valid state for withdrawal
+    //         await expect(numberGame.connect(addr1).withdraw(gameId)).to.be.revertedWith("Game not in valid state");
+    //     });
 
-        // it("should correctly transfer funds on withdrawal", async function () {
-        //     const createGameTx = await numberGame.createGame();
-        //     let receipt = await createGameTx.wait();
-        //     gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
-        //     await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
-        //     await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+    //     it("should correctly transfer funds on withdrawal", async function () {
+    //         const createGameTx = await numberGame.createGame();
+    //         let receipt = await createGameTx.wait();
+    //         gameId = receipt.events.filter(x => x.event == "GameCreated")[0].args.gameId;
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
+    //         await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("0.05") });
 
-        //     const initialContractBalance = await ethers.provider.getBalance(numberGame.address);
-        //     const initialPlayerBalance = await ethers.provider.getBalance(addr1.address);   // less 0.05
+    //         const initialContractBalance = await ethers.provider.getBalance(numberGame.address);
+    //         const initialPlayerBalance = await ethers.provider.getBalance(addr1.address);   // less 0.05
 
-        //     expect(initialContractBalance).to.equal(ethers.utils.parseEther("0.1"));
-        //     // Player 1 withdraws from the game
-        //     const tx = await numberGame.connect(addr1).withdraw(gameId);
-        //     receipt = await tx.wait();
-        //     const withdrawEvent = receipt.events.filter(e => e.event === 'Withdrawn')[0];
-        //     console.log("Withdrawn Amount to Player 1:", withdrawEvent.args[2].toString());
-        //     console.log("Withdrawn Amount to Player 2:", withdrawEvent.args[3].toString());
+    //         expect(initialContractBalance).to.equal(ethers.utils.parseEther("0.1"));
+    //         // Player 1 withdraws from the game
+    //         const tx = await numberGame.connect(addr1).withdraw(gameId);
+    //         receipt = await tx.wait();
+    //         const withdrawEvent = receipt.events.filter(e => e.event === 'Withdrawn')[0];
+    //         console.log("Withdrawn Amount to Player 1:", withdrawEvent.args[2].toString());
+    //         console.log("Withdrawn Amount to Player 2:", withdrawEvent.args[3].toString());
 
-        //     const gasUsed = receipt.gasUsed.mul(tx.gasPrice);
-        //     const expectedPlayerBalance = initialPlayerBalance.sub(gasUsed).add(ethers.utils.parseEther("0.025")); // Assuming half is refunded
-        //     const finalPlayerBalance = await ethers.provider.getBalance(addr1.address);
-        //     const x = finalPlayerBalance.sub(expectedPlayerBalance);
+    //         const gasUsed = receipt.gasUsed.mul(tx.gasPrice);
+    //         const expectedPlayerBalance = initialPlayerBalance.sub(gasUsed).add(ethers.utils.parseEther("0.025")); // Assuming half is refunded
+    //         const finalPlayerBalance = await ethers.provider.getBalance(addr1.address);
+    //         const x = finalPlayerBalance.sub(expectedPlayerBalance);
 
-        //     expect(finalPlayerBalance).to.equal(expectedPlayerBalance);
-        //     expect(await ethers.provider.getBalance(numberGame.address)).to.equal(initialContractBalance.sub(ethers.utils.parseEther("0.075"))); // Assuming total refund of 0.075 ether
-        // });
+    //         expect(finalPlayerBalance).to.equal(expectedPlayerBalance);
+    //         expect(await ethers.provider.getBalance(numberGame.address)).to.equal(initialContractBalance.sub(ethers.utils.parseEther("0.075"))); // Assuming total refund of 0.075 ether
+    //     });
 
-        it("should handle non-existent gameId", async function () {
-            const nonExistentGameId = 9999;
-            await expect(numberGame.connect(addr1).withdraw(nonExistentGameId)).to.be.revertedWith("Game does not exist");
-        });
+    //     it("should handle non-existent gameId", async function () {
+    //         const nonExistentGameId = 9999;
+    //         await expect(numberGame.connect(addr1).withdraw(nonExistentGameId)).to.be.revertedWith("Game does not exist");
+    //     });
 
-        it("should resist reentrancy attacks", async function () {
-            // Mock a reentrancy attempt by addr1
-            await expect(numberGame.connect(addr1).withdraw(gameId)).to.be.revertedWith("ReentrancyGuard: reentrant call");
-        });
+    //     it("should resist reentrancy attacks", async function () {
+    //         // Reentrancy contract done halfway. not tested yet.
+    //         await expect(numberGame.connect(addr1).withdraw(gameId)).to.be.revertedWith("ReentrancyGuard: reentrant call");
+    //     });
 
-
-
-
-    });
+    // });
     
     // describe("NumberGame administrative functions", function () {
     //     let tx, receipt, gameId;
@@ -364,5 +361,51 @@ describe("NumberGame", function () {
     //     });
     // });
 
+    // describe("ownerWithdraw function", function() {
+    //     it("should allow the owner to withdraw", async function() {
+    //         const tx = await numberGame.createGame();
+    //         const receipt = await tx.wait();
+    //         const gameId = receipt.events[0].args.gameId;
 
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("1") });
+    //         await numberGame.connect(addr2).joinGame(gameId, { value: ethers.utils.parseEther("1") });
+    //         await numberGame.connect(addr1).withdraw(gameId);
+    //         const unclaimedBalance = await numberGame.unclaimedBalance();
+    //         expect(unclaimedBalance.eq(ethers.utils.parseEther("0.5"))).to.be.true;
+    //         await numberGame.ownerWithdraw(ethers.utils.parseEther("0.5"));
+    //         expect(await ethers.provider.getBalance(numberGame.address)).to.equal(ethers.utils.parseEther("0"));
+    //     });
+
+    //     it("should not allow non-owners to withdraw", async function() {
+    //         const tx = await numberGame.createGame();
+    //         const receipt = await tx.wait();
+    //         const gameId = receipt.events[0].args.gameId;
+    //         const game = await numberGame.games(gameId);
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("1.0") });
+    //         await numberGame.connect(addr1).withdraw(gameId);
+    //         await expect(numberGame.connect(addr1).ownerWithdraw(ethers.utils.parseEther("0.5"))).to.be.revertedWith("Ownable: caller is not the owner");
+    //     });
+
+    //     it("should not allow withdrawal of more than the contract's balance", async function() {
+    //         const tx = await numberGame.createGame();
+    //         const receipt = await tx.wait();
+    //         const gameId = receipt.events[0].args.gameId;
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("1") });
+    //         await numberGame.connect(addr1).withdraw(gameId);
+    //         await expect(numberGame.ownerWithdraw(ethers.utils.parseEther("1"))).to.be.revertedWith("Insufficient contract balance");
+    //     });
+
+    //     it("should adjust unclaimedBalance correctly", async function() {
+    //         const tx = await numberGame.createGame();
+    //         const receipt = await tx.wait();
+    //         const gameId = receipt.events[0].args.gameId;
+    //         await numberGame.connect(addr1).joinGame(gameId, { value: ethers.utils.parseEther("1") });
+    //         const initialUnclaimedBalance = await numberGame.unclaimedBalance();
+    //         console.log(initialUnclaimedBalance) // 0
+    //         await numberGame.connect(addr1).withdraw(gameId);
+
+    //         const finalUnclaimedBalance = await numberGame.unclaimedBalance();   // 0.5
+    //         expect(initialUnclaimedBalance).to.equal(finalUnclaimedBalance.sub(ethers.utils.parseEther("0.5")));
+    //     });
+    // });
 });

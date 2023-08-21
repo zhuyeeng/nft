@@ -46,7 +46,7 @@ contract NumberGame is ReentrancyGuard {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can call this");
+        require(msg.sender == owner, "Ownable: caller is not the owner");
         _;
     }
 
@@ -176,7 +176,7 @@ contract NumberGame is ReentrancyGuard {
         require(msg.sender == game.player1 || msg.sender == game.player2, "Not a player");
         require(game.currentState != GameState.GameEnded &&
             game.currentState != GameState.NewGame, "Game not in valid state");
-        require(game.player1Bet > 0 && game.player2Bet > 0, "Player must have balance");
+        require(game.player1Bet > 0 || game.player2Bet > 0, "Player must have balance");
         uint256 player1BetAmount = game.player1Bet;
         uint256 player2BetAmount = game.player2Bet;
         game.player1Bet = 0;
