@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { tranding_category_filter } from "../../data/categories_data";
 import { HeadLine } from "../../components/component";
-import Feature_collections_data from "../../data/Feature_collections_data";
+import {fetchExploreCollectionNFTData} from "../../data/Feature_collections_data";
 import Collection_dropdown from "../../components/dropdown/collection_dropdown";
 import Explore_collection_item from "../../components/collectrions/explore_collection_item";
 import Meta from "../../components/Meta";
@@ -13,16 +13,15 @@ import Image from "next/image";
 const Explore_collection = () => {
   const dispatch = useDispatch();
   const [collectionFilteredData, setCollectionFilteredData] = useState(
-    Feature_collections_data
-  );
+    fetchExploreCollectionNFTData  );
   const [filterVal, setFilterVal] = useState(0);
 
   const handleItemFilter = (text) => {
     if (text === "all") {
-      setCollectionFilteredData(Feature_collections_data);
+      setCollectionFilteredData(fetchExploreCollectionNFTData);
     } else {
       setCollectionFilteredData(
-        Feature_collections_data.filter((item) => item.category === text)
+        fetchExploreCollectionNFTData.filter((item) => item.category === text)
       );
     }
   };
